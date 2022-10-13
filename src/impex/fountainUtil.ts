@@ -15,7 +15,8 @@ function _normalizeCharacter(character:string):string {
 
 function _findEmotionForParenthetical(parenthetical:string | null):Emotion {
   if (!parenthetical) return Emotion.NEUTRAL;
-  return parentheticalToEmotion(parenthetical);
+  const middle = parenthetical.substring(1, parenthetical.length - 1); // Strip "(" and ")".
+  return parentheticalToEmotion(middle);
 }
 
 function _fountainTokensToSpiel(tokens:any) : Spiel {
@@ -37,7 +38,7 @@ function _fountainTokensToSpiel(tokens:any) : Spiel {
       case 'dialogue':
         const emotion = _findEmotionForParenthetical(lastParenthetical);
         const line = new SpielLine(lastNormalizedCharacter, [stripHtml(token.text)], emotion);
-        const nodeId = spiel.nextNodeId++;
+        const nodeId = spiel.nodes.length;
         spiel.nodes.push(new SpielNode(nodeId, line,[]));
         lastParenthetical = null;
         break;
@@ -48,6 +49,7 @@ function _fountainTokensToSpiel(tokens:any) : Spiel {
   }
 
   spiel.defaultCharacter = findCharacterWithMostLines(spiel.nodes) ?? '';
+  spiel.nextNodeId = spiel.nodes.length;
   return spiel;
 }
 

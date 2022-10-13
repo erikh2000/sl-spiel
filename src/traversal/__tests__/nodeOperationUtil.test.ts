@@ -1,6 +1,4 @@
-import {
-  removeNode,
-} from "../nodeOperationUtil";
+import { removeNode, replaceNode } from "../nodeOperationUtil";
 import Spiel, {duplicateSpiel} from 'types/Spiel';
 import SpielLine from 'types/SpielLine';
 import SpielNode from 'types/SpielNode';
@@ -35,6 +33,20 @@ describe('spielUtil', () => {
       const expected = new Spiel();
       expected.nodes = [node1, node3];
       removeNode(spiel, 7);
+      expect(spiel).toEqual(expected);
+    });
+  });
+  
+  describe('replaceNode', () => {
+    it('replaces a node with another node', () => {
+      const spiel = new Spiel();
+      const node1 = new SpielNode(6, new SpielLine('BOB', ['Hey!']), []);
+      const node2 = new SpielNode(7, new SpielLine('BOB', ['Hey!']), []);
+      const node3 = new SpielNode(7, new SpielLine('BAWB', ['Hay!']), []);
+      spiel.nodes = [node1, node2];
+      const expected = duplicateSpiel(spiel);
+      expected.nodes[1] = node3;
+      replaceNode(spiel, node3);
       expect(spiel).toEqual(expected);
     });
   });

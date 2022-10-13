@@ -10,7 +10,7 @@ import SpielLine from "../types/SpielLine";
 
 function _emotionToParenthetical(emotion:Emotion):string {
   if (emotion === Emotion.NEUTRAL) return '';
-  return `(${emotionToParenthetical(emotion)})`;
+  return `(${emotionToParenthetical(emotion)}) `;
 }
 
 function _runtimeRepliesToStorable(replies:SpielReply[]):any {
@@ -121,12 +121,10 @@ function _storableRepliesToRuntime(storableReplies:any):SpielReply[] {
 }
 
 function _storableToRuntime(storableSpiel:any):Spiel {
-  const spiel = {
-    nodes: _storableNodesToRuntime(storableSpiel.nodes),
-    rootReplies: _storableRepliesToRuntime(storableSpiel.rootReplies),
-    nextNodeId: 0,
-    defaultCharacter: storableSpiel.defaultCharacter
-  };
+  const spiel = new Spiel();
+  spiel.nodes = _storableNodesToRuntime(storableSpiel.nodes);
+  spiel.rootReplies = _storableRepliesToRuntime(storableSpiel.rootReplies);
+  spiel.defaultCharacter = storableSpiel.defaultCharacter;
   reassignNodeIds(spiel);
   spiel.nextNodeId = findHighestNodeId(spiel.nodes) + 1;
   return spiel;

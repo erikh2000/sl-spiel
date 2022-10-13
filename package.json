@@ -38,9 +38,10 @@
     "yaml": "^2.1.2"
   },
   "jest": {
-    "collectCoverage": true,
+    "collectCoverage": false,
     "collectCoverageFrom": [
-      "./src/**/*.{js,ts}"
+      "./src/**/*.{js,ts}",
+      "!./src/3rdParty/**"
     ],
     "moduleDirectories": [
       "node_modules",
