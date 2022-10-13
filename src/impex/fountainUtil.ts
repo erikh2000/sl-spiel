@@ -4,7 +4,7 @@ import Emotion from "types/Emotion";
 import Spiel from 'types/Spiel';
 import SpielLine from "types/SpielLine";
 import SpielNode from 'types/SpielNode';
-import {findCharacterWithMostLines} from "traversal/spielUtil";
+import {findCharacterWithMostLines} from "analysis/findUtil";
 import {parentheticalToEmotion} from "impex/emotionUtil";
 
 function _normalizeCharacter(character:string):string {

@@ -1,4 +1,4 @@
-import { parentheticalToEmotion } from "../emotionUtil";
+import {emotionToParenthetical, parentheticalToEmotion} from "../emotionUtil";
 import Emotion from "types/Emotion";
 
 describe('emotionUtil', () => {
@@ -50,6 +50,14 @@ describe('emotionUtil', () => {
       const expected = Emotion.HAPPY;
       const emotion = parentheticalToEmotion(parenthetical);
       expect(emotion).toEqual(expected);
+    });
+  });
+  
+  describe('emotionToParenthetical()', () => {
+    it('returns text for an emotion', () => {
+      const parenthetical = emotionToParenthetical(Emotion.CONFUSED);
+      const expected = 'confused';
+      expect(parenthetical).toEqual(expected);
     });
   });
 });

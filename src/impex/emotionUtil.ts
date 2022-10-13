@@ -28,3 +28,7 @@ export function parentheticalToEmotion(parenthetical:string):Emotion {
   }
   return Emotion.NEUTRAL;
 }
+
+export function emotionToParenthetical(emotion:Emotion):string {
+  return Emotion[emotion].toLowerCase();
+}
