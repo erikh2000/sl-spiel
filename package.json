@@ -41,8 +41,14 @@
     "collectCoverage": false,
     "collectCoverageFrom": [
       "./src/**/*.{js,ts}",
-      "!./src/3rdParty/**"
+      "!./src/3rdParty/**",
+      "!./src/index.ts"
     ],
+    "coverageThreshold": {
+      "global": {
+        "lines": 100
+      }
+    },
     "moduleDirectories": [
       "node_modules",
       "src"
