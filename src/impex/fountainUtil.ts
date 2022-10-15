@@ -53,7 +53,7 @@ function _fountainTokensToSpiel(tokens:any) : Spiel {
   return spiel;
 }
 
-export function loadSpielFromText(text:string) : Spiel {
+export function importFountain(text:string) : Spiel {
   let spiel:Spiel = new Spiel();
   fountain.parse(text, true, (output:any) => {
     spiel = _fountainTokensToSpiel(output.tokens);

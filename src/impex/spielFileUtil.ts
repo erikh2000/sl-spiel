@@ -130,12 +130,12 @@ function _storableToRuntime(storableSpiel:any):Spiel {
   return spiel;
 }
 
-export function spielToText(spiel:Spiel):string {
+export function exportSpielFile(spiel:Spiel):string {
   const storableSpiel = _runtimeToStorable(spiel);
   return stringify(storableSpiel);
 }
 
-export function textToSpiel(text:string):Spiel {
+export function importSpielFile(text:string):Spiel {
   const storableSpiel = parse(text);
   return _storableToRuntime(storableSpiel);
 }

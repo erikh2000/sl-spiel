@@ -1,4 +1,4 @@
-import SpielManager from "../SpielManager";
+import MatchManager from "../MatchManager";
 import Spiel from "types/Spiel";
 import SpielLine from "types/SpielLine";
 import SpielNode from "types/SpielNode";
@@ -16,11 +16,11 @@ function _getCode(reply:SpielReply | null):string | null {
   return reply === null ? null : reply.line.dialogue[0];
 }
 
-describe('SpielManager', () => {
+describe('MatchManager', () => {
   describe('setNode()', () => {
     it('throws when setting to a non-existent node', () => {
-      const spielManager = new SpielManager();
-      expect(() => spielManager.setNode(1)).toThrow();
+      const matchManager = new MatchManager();
+      expect(() => matchManager.setNode(1)).toThrow();
     });
 
     it('sets to a new node', () => {
@@ -28,15 +28,15 @@ describe('SpielManager', () => {
       const reply = new SpielReply(new SpielLine('BUBBA', ['Hey!']), ['hi']);
       const node = new SpielNode(1, new SpielLine('BUBBA', ['Hi!']), [reply]);
       spiel.nodes = [node];
-      const spielManager = new SpielManager();
-      spielManager.loadForSpiel(spiel);
-      spielManager.setNode(1);
+      const matchManager = new MatchManager();
+      matchManager.loadForSpiel(spiel);
+      matchManager.setNode(1);
     });
   });
 
   describe('checkForMatch()', () => {
     let spiel:Spiel;
-    let spielManager:SpielManager;
+    let matchManager:MatchManager;
 
     beforeEach(() => {
       spiel = new Spiel();
@@ -54,77 +54,77 @@ describe('SpielManager', () => {
         _reply('y', ['why', 'yay', 'baby']),
         _reply('z', ['zee'])
       ];
-      spielManager = new SpielManager();
-      spielManager.loadForSpiel(spiel);
+      matchManager = new MatchManager();
+      matchManager.loadForSpiel(spiel);
     });
 
     it('handles no match', () => {
-      const reply = spielManager.checkForMatch('garuffalo');
+      const reply = matchManager.checkForMatch('garuffalo');
       expect(_getCode(reply)).toEqual(null);
     });
 
     it('does not match on a node when no node is set', () => {
-      const reply = spielManager.checkForMatch('ay');
+      const reply = matchManager.checkForMatch('ay');
       expect(_getCode(reply)).toEqual(null);
     });
 
     it('matches on current node', () => {
-      spielManager.setNode(1);
-      const reply = spielManager.checkForMatch('ay');
+      matchManager.setNode(1);
+      const reply = matchManager.checkForMatch('ay');
       expect(_getCode(reply)).toEqual('a');
     });
 
     it('does not match on current node when text does not match it', () => {
-      spielManager.setNode(1);
-      const reply = spielManager.checkForMatch('bee');
+      matchManager.setNode(1);
+      const reply = matchManager.checkForMatch('bee');
       expect(_getCode(reply)).toEqual(null);
     });
 
     it('does not match on node with no replies', () => {
-      spielManager.setNode(3);
-      const reply = spielManager.checkForMatch('bee');
+      matchManager.setNode(3);
+      const reply = matchManager.checkForMatch('bee');
       expect(_getCode(reply)).toEqual(null);
     });
 
     it('matches on node reply with one criterion', () => {
-      spielManager.setNode(1);
-      const reply = spielManager.checkForMatch('ay baby');
+      matchManager.setNode(1);
+      const reply = matchManager.checkForMatch('ay baby');
       expect(_getCode(reply)).toEqual('a');
     });
 
     it('matches first of two criteria', () => {
-      spielManager.setNode(2);
-      const reply = spielManager.checkForMatch('bee');
+      matchManager.setNode(2);
+      const reply = matchManager.checkForMatch('bee');
       expect(_getCode(reply)).toEqual('b');
     });
 
     it('matches second of two criteria', () => {
-      spielManager.setNode(2);
-      const reply = spielManager.checkForMatch('baby');
+      matchManager.setNode(2);
+      const reply = matchManager.checkForMatch('baby');
       expect(_getCode(reply)).toEqual('b');
     });
 
     it('matches earlier reply when multiple replies would match', () => {
-      spielManager.setNode(4);
-      const reply = spielManager.checkForMatch('dead sea');
+      matchManager.setNode(4);
+      const reply = matchManager.checkForMatch('dead sea');
       expect(_getCode(reply)).toEqual('c');
     });
 
     it('matches root reply', () => {
-      spielManager.setNode(3);
-      const reply = spielManager.checkForMatch('why');
+      matchManager.setNode(3);
+      const reply = matchManager.checkForMatch('why');
       expect(_getCode(reply)).toEqual('y');
     });
 
     it('matches earlier root reply when multiple replies would match', () => {
-      spielManager.setNode(3);
-      const reply = spielManager.checkForMatch('zee baby');
+      matchManager.setNode(3);
+      const reply = matchManager.checkForMatch('zee baby');
       expect(_getCode(reply)).toEqual('y');
     });
 
     it('matches current node reply before root reply when either would match', () => {
-      spielManager.setNode(2);
-      const reply = spielManager.checkForMatch('zee baby');
+      matchManager.setNode(2);
+      const reply = matchManager.checkForMatch('zee baby');
       expect(_getCode(reply)).toEqual('b');
     });
   });

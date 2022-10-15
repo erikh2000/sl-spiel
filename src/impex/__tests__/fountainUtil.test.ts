@@ -1,4 +1,4 @@
-import {loadSpielFromText} from "../fountainUtil";
+import {importFountain} from "../fountainUtil";
 import emptyFountainText from "../__snapshots__/emptyFountain";
 import fullFountainText from "../__snapshots__/fullFountain";
 import Emotion from 'types/Emotion';
@@ -14,7 +14,7 @@ describe('fountainUtil', () => {
         nextNodeId: 0,
         defaultCharacter: ''
       };
-      const spiel = loadSpielFromText(emptyFountainText);
+      const spiel = importFountain(emptyFountainText);
       expect(spiel).toEqual(expected);
     });
     
@@ -30,7 +30,7 @@ describe('fountainUtil', () => {
         nextNodeId:2,
         defaultCharacter:"BIFF"
       };
-      const spiel = loadSpielFromText(fullFountainText);
+      const spiel = importFountain(fullFountainText);
       expect(spiel).toEqual(expected);
     });
   });

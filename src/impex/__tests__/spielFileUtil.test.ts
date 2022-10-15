@@ -1,4 +1,4 @@
-import {spielToText, textToSpiel} from "../spielFileUtil";
+import {exportSpielFile, importSpielFile} from "../spielFileUtil";
 import Spiel from "types/Spiel";
 import SpielNode from "types/SpielNode";
 import SpielLine from "types/SpielLine";
@@ -8,10 +8,10 @@ import fullSpielText from "../__snapshots__/fullSpiel";
 import Emotion from "../../types/Emotion";
 
 describe('spielFileUtil', () => {
-  describe('spielToText()', () => {
+  describe('exportSpielFile()', () => {
     it('creates text for an empty spiel', () => {
       const spiel = new Spiel();
-      const text = spielToText(spiel);
+      const text = exportSpielFile(spiel);
       expect(text).toEqual(emptySpielText);
     });
   
@@ -25,15 +25,15 @@ describe('spielFileUtil', () => {
       spiel.nextNodeId = 6;
       spiel.defaultCharacter = 'BIFF';
       spiel.rootReplies = [new SpielReply(new SpielLine('BIFF', ['Calm down!'], Emotion.AFRAID), ['shut up'])]
-      const text = spielToText(spiel);
+      const text = exportSpielFile(spiel);
       expect(text).toEqual(fullSpielText);
     });
   });
 
-  describe('textToSpiel()', () => {
+  describe('importSpielFile()', () => {
     it('creates empty spiel', () => {
       const expected = { nodes: [], rootReplies: [], nextNodeId: 0, defaultCharacter: '' };
-      const spiel = textToSpiel(emptySpielText);
+      const spiel = importSpielFile(emptySpielText);
       expect(spiel).toEqual(expected);
     });
   });
@@ -63,7 +63,7 @@ describe('spielFileUtil', () => {
       nextNodeId:2,
       defaultCharacter:"BIFF"
     };
-    const spiel = textToSpiel(fullSpielText);
+    const spiel = importSpielFile(fullSpielText);
     expect(spiel).toEqual(expected);
   });
 });

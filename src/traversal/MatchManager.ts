@@ -52,7 +52,7 @@ function _createRootMatchers(spiel:Spiel):IMatcher[] {
   return _createMatchersForReplies(spiel.rootReplies);
 }
 
-class SpielManager {
+class MatchManager {
   rootMatchers:IMatcher[];
   nodeMatchers:NodeMatchersMap;
   currentNodeMatchers:IMatcher[];
@@ -82,4 +82,4 @@ class SpielManager {
   }
 }
 
-export default SpielManager;
+export default MatchManager;
