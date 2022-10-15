@@ -1,4 +1,6 @@
 export * from 'impex/fountainUtil';
+export * from 'impex/spielFileUtil';
+export * from 'analysis/findUtil';
 
 export { default as Spiel, repairSpiel } from 'types/Spiel';
 export { default as SpielNode } from 'types/SpielNode';
