@@ -17,12 +17,11 @@ describe('spielFileUtil', () => {
   
     it('creates text for a populated spiel', () => {
       const spiel = new Spiel();
-      const node1 = new SpielNode(4, new SpielLine('BIFF', ['Hey.'], Emotion.AMUSED), [
+      const node1 = new SpielNode(new SpielLine('BIFF', ['Hey.'], Emotion.AMUSED), [
         new SpielReply(new SpielLine('BIFF', ['Hey hey!']), ['hey', 'hay'])
       ]);
-      const node2 = new SpielNode(5, new SpielLine('BIFF', ['ho']), []);
+      const node2 = new SpielNode(new SpielLine('BIFF', ['ho']), []);
       spiel.nodes = [node1, node2];
-      spiel.nextNodeId = 6;
       spiel.defaultCharacter = 'BIFF';
       spiel.rootReplies = [new SpielReply(new SpielLine('BIFF', ['Calm down!'], Emotion.AFRAID), ['shut up'])]
       const text = exportSpielFile(spiel);
@@ -32,7 +31,7 @@ describe('spielFileUtil', () => {
 
   describe('importSpielFile()', () => {
     it('creates empty spiel', () => {
-      const expected = { nodes: [], rootReplies: [], nextNodeId: 0, defaultCharacter: '' };
+      const expected = { nodes: [], rootReplies: [], defaultCharacter: '' };
       const spiel = importSpielFile(emptySpielText);
       expect(spiel).toEqual(expected);
     });
@@ -45,12 +44,10 @@ describe('spielFileUtil', () => {
         replies:[{
           line:{character:"BIFF",dialogue:["Hey hey!"],emotion:Emotion.NEUTRAL},
           matchCriteria:["hey","hay"]
-        }],
-        id:0
+        }]
       },{
       line:{character:"BIFF",dialogue:["ho"],emotion:Emotion.NEUTRAL},
-        replies:[],
-        id:1
+        replies:[]
       }],
       rootReplies:[{
         line:{
@@ -60,7 +57,6 @@ describe('spielFileUtil', () => {
         },
         matchCriteria:["shut up"]
       }],
-      nextNodeId:2,
       defaultCharacter:"BIFF"
     };
     const spiel = importSpielFile(fullSpielText);

@@ -1,11 +1,9 @@
 import Emotion from "types/Emotion";
 import Spiel from 'types/Spiel';
-import SpielNode, {INVALID_ID_MARKER} from 'types/SpielNode';
+import SpielNode from 'types/SpielNode';
 import SpielReply from 'types/SpielReply';
 import {parse, stringify} from 'yaml';
 import {emotionToParenthetical, parentheticalToEmotion} from "./emotionUtil";
-import {reassignNodeIds} from "../traversal/nodeOperationUtil";
-import {findHighestNodeId} from "../analysis/findUtil";
 import SpielLine from "../types/SpielLine";
 
 function _emotionToParenthetical(emotion:Emotion):string {
@@ -80,14 +78,14 @@ function _parseStorableDialogue(storableDialogue:string):DialogueAndEmotion {
 function _storableSimpleNodeToRuntime(storableNode:any):SpielNode {
   const character = _getCharacterFromStorableNodeOrReply(storableNode);
   const {dialogue, emotion} = _parseStorableDialogue(storableNode[character]);
-  return new SpielNode(INVALID_ID_MARKER, new SpielLine(character, dialogue, emotion), []);
+  return new SpielNode(new SpielLine(character, dialogue, emotion), []);
 }
 
 function _storableComplexNodeToRuntime(storableNode:any):SpielNode {
   const character = _getCharacterFromStorableNodeOrReply(storableNode);
   const nodeData = storableNode[character];
   const {dialogue, emotion} = _parseStorableDialogue(nodeData.dialogue);
-  return new SpielNode(INVALID_ID_MARKER, new SpielLine(character, dialogue, emotion), 
+  return new SpielNode(new SpielLine(character, dialogue, emotion), 
     _storableRepliesToRuntime(nodeData.replies));
 }
 
@@ -125,8 +123,6 @@ function _storableToRuntime(storableSpiel:any):Spiel {
   spiel.nodes = _storableNodesToRuntime(storableSpiel.nodes);
   spiel.rootReplies = _storableRepliesToRuntime(storableSpiel.rootReplies);
   spiel.defaultCharacter = storableSpiel.defaultCharacter;
-  reassignNodeIds(spiel);
-  spiel.nextNodeId = findHighestNodeId(spiel.nodes) + 1;
   return spiel;
 }
 

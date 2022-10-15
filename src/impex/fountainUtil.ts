@@ -39,7 +39,7 @@ function _fountainTokensToSpiel(tokens:any) : Spiel {
         const emotion = _findEmotionForParenthetical(lastParenthetical);
         const line = new SpielLine(lastNormalizedCharacter, [stripHtml(token.text)], emotion);
         const nodeId = spiel.nodes.length;
-        spiel.nodes.push(new SpielNode(nodeId, line,[]));
+        spiel.nodes.push(new SpielNode(line,[]));
         lastParenthetical = null;
         break;
 
@@ -49,7 +49,6 @@ function _fountainTokensToSpiel(tokens:any) : Spiel {
   }
 
   spiel.defaultCharacter = findCharacterWithMostLines(spiel.nodes) ?? '';
-  spiel.nextNodeId = spiel.nodes.length;
   return spiel;
 }
 

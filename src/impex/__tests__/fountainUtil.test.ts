@@ -11,7 +11,6 @@ describe('fountainUtil', () => {
       const expected = {
         nodes: [],
         rootReplies: [],
-        nextNodeId: 0,
         defaultCharacter: ''
       };
       const spiel = importFountain(emptyFountainText);
@@ -23,11 +22,10 @@ describe('fountainUtil', () => {
       const line1 = new SpielLine('BIFF', ["ho"]);
       const expected = {
         nodes:[
-          new SpielNode(0, line0, []),
-          new SpielNode(1, line1, [])
+          new SpielNode(line0, []),
+          new SpielNode(line1, [])
         ],
         rootReplies:[],
-        nextNodeId:2,
         defaultCharacter:"BIFF"
       };
       const spiel = importFountain(fullFountainText);

@@ -42,8 +42,8 @@ function _createMatchersForReplies(replies:SpielReply[]) {
 
 function _createNodeMatchers(spiel:Spiel):NodeMatchersMap {
   const map:NodeMatchersMap = {};
-  spiel.nodes.forEach(node => {
-    map[node.id] = _createMatchersForReplies(node.replies);
+  spiel.nodes.forEach((node, nodeIndex) => {
+    map[nodeIndex] = _createMatchersForReplies(node.replies);
   })
   return map;
 }
@@ -69,9 +69,9 @@ class MatchManager {
     this.nodeMatchers = _createNodeMatchers(spiel);
   }
 
-  setNode(nodeId:number) {
-    const matchers = this.nodeMatchers[nodeId];
-    if (!matchers) throw Error(`Node ID ${nodeId} doesn't exist.`);
+  setNode(nodeIndex:number) {
+    const matchers = this.nodeMatchers[nodeIndex];
+    if (!matchers) throw Error(`Node #${nodeIndex} doesn't exist.`);
     this.currentNodeMatchers = matchers;
   }
 
