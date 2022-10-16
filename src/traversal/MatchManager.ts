@@ -58,15 +58,10 @@ class MatchManager {
   currentNodeMatchers:IMatcher[];
   emptyMatchers:IMatcher[];
 
-  constructor() {
-    this.rootMatchers = [];
-    this.nodeMatchers = {};
-    this.currentNodeMatchers = this.emptyMatchers = [];
-  }
-
-  loadForSpiel(spiel:Spiel) {
+  constructor(spiel:Spiel) {
     this.rootMatchers = _createRootMatchers(spiel);
     this.nodeMatchers = _createNodeMatchers(spiel);
+    this.currentNodeMatchers = this.emptyMatchers = [];
   }
 
   setNode(nodeIndex:number) {

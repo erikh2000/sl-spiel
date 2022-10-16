@@ -11,7 +11,9 @@ describe('fountainUtil', () => {
       const expected = {
         nodes: [],
         rootReplies: [],
-        defaultCharacter: ''
+        defaultCharacter: '',
+        currentNodeIndex: 0, 
+        matchManager:null,
       };
       const spiel = importFountain(emptyFountainText);
       expect(spiel).toEqual(expected);
@@ -26,7 +28,9 @@ describe('fountainUtil', () => {
           new SpielNode(line1, [])
         ],
         rootReplies:[],
-        defaultCharacter:"BIFF"
+        defaultCharacter:"BIFF",
+        currentNodeIndex: 0, 
+        matchManager:null,
       };
       const spiel = importFountain(fullFountainText);
       expect(spiel).toEqual(expected);

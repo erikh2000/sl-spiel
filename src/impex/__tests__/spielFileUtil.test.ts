@@ -31,7 +31,7 @@ describe('spielFileUtil', () => {
 
   describe('importSpielFile()', () => {
     it('creates empty spiel', () => {
-      const expected = { nodes: [], rootReplies: [], defaultCharacter: '' };
+      const expected = { nodes: [], rootReplies: [], currentNodeIndex: 0, matchManager:null, defaultCharacter: '' };
       const spiel = importSpielFile(emptySpielText);
       expect(spiel).toEqual(expected);
     });
@@ -57,7 +57,9 @@ describe('spielFileUtil', () => {
         },
         matchCriteria:["shut up"]
       }],
-      defaultCharacter:"BIFF"
+      defaultCharacter:"BIFF",
+      currentNodeIndex: 0, 
+      matchManager:null,
     };
     const spiel = importSpielFile(fullSpielText);
     expect(spiel).toEqual(expected);
