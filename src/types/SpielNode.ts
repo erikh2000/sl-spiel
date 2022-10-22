@@ -23,7 +23,7 @@ export function repairSpielNode(node:SpielNode):boolean {
   let wasChanged = false;
   
   if (node.line === undefined) {
-    node.line = new SpielLine('', []);
+    node.line = new SpielLine('', ['']);
     wasChanged = true;
   } else {
     wasChanged = repairSpielLine(node.line) || wasChanged;

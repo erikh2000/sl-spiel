@@ -120,8 +120,7 @@ function _storableRepliesToRuntime(storableReplies:any):SpielReply[] {
 
 function _storableToRuntime(storableSpiel:any):Spiel {
   const spiel = new Spiel();
-  const nodes = _storableNodesToRuntime(storableSpiel.nodes);
-  spiel.addNodes(nodes);
+  spiel.nodes = _storableNodesToRuntime(storableSpiel.nodes);
   spiel.rootReplies = _storableRepliesToRuntime(storableSpiel.rootReplies);
   spiel.defaultCharacter = storableSpiel.defaultCharacter;
   return spiel;

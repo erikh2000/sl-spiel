@@ -1,8 +1,11 @@
+import {findCharacterWithMostLines} from "analysis/findUtil";
 import {removeEmptyElements} from "common/arrayUtil";
+import {splitText} from "common/textFormatUtil";
+import Emotion from 'types/Emotion';
+import MatchManager from "traversal/MatchManager";
 import SpielNode, {duplicateSpielNode, repairSpielNode} from 'types/SpielNode';
 import SpielReply, {duplicateSpielReply, repairSpielReply} from 'types/SpielReply';
-import { findCharacterWithMostLines } from "analysis/findUtil";
-import MatchManager from "../traversal/MatchManager";
+import SpielLine from "types/SpielLine";
 
 function _duplicateSpiel(from:Spiel):Spiel {
     const spiel = new Spiel();
@@ -11,6 +14,25 @@ function _duplicateSpiel(from:Spiel):Spiel {
     spiel.defaultCharacter = from.defaultCharacter;
     spiel.currentNodeIndex = from.currentNodeIndex;
     return spiel;
+}
+
+function _createReply(matchCriteria:string|string[], dialogue:string|string[], character:string, emotion:Emotion):SpielReply {
+    if (typeof dialogue === 'string') dialogue = splitText(dialogue);
+    if (typeof matchCriteria === 'string') matchCriteria = splitText(matchCriteria);
+    const replyLine = new SpielLine(character, dialogue, emotion);
+    return new SpielReply(replyLine, matchCriteria);
+}
+
+function _repairCurrentNodeIndex(spiel:Spiel):boolean {
+    if (spiel.currentNodeIndex < 0) {
+        spiel.currentNodeIndex = 0;
+        return true;
+    }
+    if (spiel.currentNodeIndex !== 0 && spiel.currentNodeIndex >= spiel.nodes.length) {
+        spiel.currentNodeIndex = spiel.nodes.length ? spiel.nodes.length-1 : 0;
+        return true;
+    }
+    return false;
 }
 
 export function repairSpiel(spiel:Spiel):boolean {
@@ -35,16 +57,12 @@ export function repairSpiel(spiel:Spiel):boolean {
         spiel.defaultCharacter = findCharacterWithMostLines(spiel.nodes) || '';
         wasChanged = true;
     }
-    if (spiel.currentNodeIndex < 0) {
-        spiel.currentNodeIndex = 0;
-        wasChanged = true;
-    } else if (spiel.currentNodeIndex !== 0 && spiel.currentNodeIndex >= spiel.nodes.length) {
-        spiel.currentNodeIndex = spiel.nodes.length ? spiel.nodes.length-1 : 0;
-        wasChanged = true;
-    }
+    wasChanged = _repairCurrentNodeIndex(spiel) || wasChanged;
     if (wasChanged) spiel.matchManager = null;
     return wasChanged;
 }
+
+const DIALOGUE_PLACEHOLDER = [''];
 
 class Spiel {
     nodes:SpielNode[];
@@ -58,6 +76,11 @@ class Spiel {
         this.rootReplies = [];
         this.defaultCharacter = '';
         this.currentNodeIndex = 0;
+        this.matchManager = null;
+    }
+    
+    // Clear matching rules to cause a lazy refresh later.
+    refreshMatching() {
         this.matchManager = null;
     }
     
@@ -101,21 +124,116 @@ class Spiel {
     }
     
     checkForMatch(text:string):SpielReply | null {
-        if (!this.nodes.length) return null;
+        if (!this.nodes.length && !this.rootReplies.length) return null;
         if (!this.matchManager) this.matchManager = new MatchManager(this);
-        this.matchManager.setNode(this.currentNodeIndex);
+        if (this.nodes.length) this.matchManager.setNode(this.currentNodeIndex);
         return this.matchManager.checkForMatch(text);
     }
     
-    addNode(node:SpielNode) {
-        this.matchManager = null;
+    createNode(character?:string, emotion?:Emotion, dialogue?:string|string[]) {
+        if (character) {
+            if (this.defaultCharacter === '') this.defaultCharacter = character;
+        } else {
+            character = this.defaultCharacter;
+        }
+        if (!emotion) emotion = Emotion.NEUTRAL;
+        if (!dialogue) dialogue = DIALOGUE_PLACEHOLDER;
+        if (typeof dialogue === 'string') dialogue = splitText(dialogue);
+        const node = new SpielNode(new SpielLine(character, dialogue, emotion), []);
         this.nodes.push(node);
+        this.moveLast();
+        this.refreshMatching();
     }
     
-    addNodes(nodes:SpielNode[]) {
-        if (!nodes.length) return;
-        this.matchManager = null;
-        this.nodes = this.nodes.concat(nodes);
+    addDialogue(dialogue:string|string[]) {
+        const node = this.currentNode;
+        if (!node) throw Error('No current node');
+        if (typeof dialogue === 'string') dialogue = splitText(dialogue);
+        node.line.dialogue = (node.line.dialogue === DIALOGUE_PLACEHOLDER) ?
+          dialogue : node.line.dialogue.concat(dialogue);
+    }
+    
+    updateDialogue(dialogue:string|string[]) {
+        const node = this.currentNode;
+        if (!node) throw Error('No current node');
+        if (typeof dialogue === 'string') dialogue = splitText(dialogue);
+        node.line.dialogue = dialogue;
+    }
+    
+    addReply(matchCriteria:string|string[], dialogue:string|string[], character?:string, emotion?:Emotion) {
+        const node = this.currentNode;
+        if (!node) throw Error('No current node');
+        if (!character) character = node.line.character;
+        if (!emotion) emotion = node.line.emotion;
+        const reply = _createReply(matchCriteria, dialogue, character, emotion);
+        node.replies.push(reply);
+        this.refreshMatching();
+    }
+    
+    updateReply(replyIndex:number, matchCriteria:string|string[], dialogue:string|string[], character?:string, emotion?:Emotion) {
+        const node = this.currentNode;
+        if (!node) throw Error('No current node');
+        if (replyIndex < 0 || replyIndex >= node.replies.length) throw Error('index OOB');
+        if (!character) character = node.line.character;
+        if (!emotion) emotion = node.line.emotion;
+        node.replies[replyIndex] = _createReply(matchCriteria, dialogue, character, emotion);
+        this.refreshMatching();
+    }
+    
+    removeReply(removeIndex:number) {
+        const node = this.currentNode;
+        if (!node) throw Error('No current node');
+        if (removeIndex < 0 || removeIndex >= node.replies.length) throw Error('index OOB');
+        node.replies = node.replies.filter((reply, replyIndex) => replyIndex != removeIndex);
+        this.refreshMatching();
+    }
+    
+    removeAllReplies() {
+        const node = this.currentNode;
+        if (!node) throw Error('No current node');
+        node.replies = [];
+        this.refreshMatching();
+    }
+    
+    addRootReply(matchCriteria:string|string[], dialogue:string|string[], character?:string, emotion?:Emotion) {
+        if (!character) character = this.defaultCharacter;
+        if (!emotion) emotion = Emotion.NEUTRAL;
+        const reply = _createReply(matchCriteria, dialogue, character, emotion);
+        this.rootReplies.push(reply);
+        this.refreshMatching();
+    }
+
+    updateRootReply(replyIndex:number, matchCriteria:string|string[], dialogue:string|string[], character?:string, emotion?:Emotion) {
+        if (replyIndex < 0 || replyIndex >= this.rootReplies.length) throw Error('index OOB');
+        if (!character) character = this.defaultCharacter;
+        if (!emotion) emotion = Emotion.NEUTRAL;
+        this.rootReplies[replyIndex] = _createReply(matchCriteria, dialogue, character, emotion);;
+        this.refreshMatching();
+    }
+    
+    removeRootReply(removeIndex:number) {
+        if (removeIndex < 0 || removeIndex >= this.rootReplies.length) throw Error('index OOB');
+        this.rootReplies = this.rootReplies.filter((reply, replyIndex) => replyIndex != removeIndex);
+        this.refreshMatching();
+    }
+
+    removeAllRootReplies() {
+        this.rootReplies = [];
+        this.refreshMatching();
+    }
+    
+    removeNode(removeIndex:number) {
+        if (removeIndex < 0 || removeIndex >= this.nodes.length) throw Error('index OOB');
+        this.nodes = this.nodes.filter((node, nodeIndex) => removeIndex !== nodeIndex);
+        _repairCurrentNodeIndex(this);
+        this.refreshMatching();
+    }
+
+    removeCurrentNode() {
+        if (!this.nodes.length) throw Error('No current node');
+        this.removeNode(this.currentNodeIndex);
+        _repairCurrentNodeIndex(this);
+        this.refreshMatching();
     }
 }
 

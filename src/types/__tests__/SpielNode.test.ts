@@ -34,7 +34,7 @@ describe('SpielNode', () => {
     it('fixes undefined line', () => {
       const undefinedLine = undefined as unknown;
       const node = { line:undefinedLine, replies:[]} as SpielNode;
-      const expected = new SpielNode(new SpielLine('',[]), []);
+      const expected = new SpielNode(new SpielLine('',['']), []);
       expect(repairSpielNode(node)).toBeTruthy();
       expect(node).toEqual(expected);
     });
