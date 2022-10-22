@@ -1,6 +1,7 @@
 import SpielReply, { duplicateSpielReply, repairSpielReply } from '../SpielReply';
 import SpielLine from 'types/SpielLine';
 import Emotion from 'types/Emotion';
+import SpielNode from "../SpielNode";
 
 describe('SpielReply', () => {
   describe('duplicateSpielReply()', () => {
@@ -56,5 +57,37 @@ describe('SpielReply', () => {
         expect(reply).toEqual(expected);
       });
     })
+  });
+
+  describe('nextDialogue()', () => {
+    it('returns same text every time when only one dialogue text', () => {
+      const line = new SpielLine('BUBBA', ['Howdy!'], Emotion.HAPPY);
+      const reply = new SpielReply(line, []);
+      for(let i = 0; i < 100; ++i) {
+        expect(reply.nextDialogue()).toEqual('Howdy!');
+      }
+    });
+
+    it('returns alternating text when there are 2 texts', () => {
+      const line = new SpielLine('BUBBA', ['Howdy!', 'Hello!'], Emotion.HAPPY);
+      const reply = new SpielReply(line, []);
+      let lastText = reply.nextDialogue();
+      for(let i = 0; i < 100; ++i) {
+        const text = reply.nextDialogue();
+        expect(text !== lastText);
+        lastText = text;
+      }
+    });
+
+    it('returns non-repeating text when there are 3 texts', () => {
+      const line = new SpielLine('BUBBA', ['Howdy!', 'Hello!', 'Hi!'], Emotion.HAPPY);
+      const reply = new SpielReply(line, []);
+      let lastText = reply.nextDialogue();
+      for(let i = 0; i < 100; ++i) {
+        const text = reply.nextDialogue();
+        expect(text !== lastText);
+        lastText = text;
+      }
+    });
   });
 });

@@ -40,20 +40,21 @@ describe('spielFileUtil', () => {
   it('creates a populated spiel', () => {
     const expected = {
       nodes:[{
-        line:{character:"BIFF",dialogue:["Hey."],emotion:Emotion.AMUSED},
+        line:{character:"BIFF",dialogue:["Hey."],emotion:Emotion.AMUSED,lastDialogueNo:0},
         replies:[{
-          line:{character:"BIFF",dialogue:["Hey hey!"],emotion:Emotion.NEUTRAL},
+          line:{character:"BIFF",dialogue:["Hey hey!"],emotion:Emotion.NEUTRAL,lastDialogueNo:0},
           matchCriteria:["hey","hay"]
         }]
       },{
-      line:{character:"BIFF",dialogue:["ho"],emotion:Emotion.NEUTRAL},
+      line:{character:"BIFF",dialogue:["ho"],emotion:Emotion.NEUTRAL,lastDialogueNo:0},
         replies:[]
       }],
       rootReplies:[{
         line:{
           character:"BIFF",
           dialogue:["Calm down!"],
-          emotion:Emotion.AFRAID
+          emotion:Emotion.AFRAID,
+          lastDialogueNo:0
         },
         matchCriteria:["shut up"]
       }],

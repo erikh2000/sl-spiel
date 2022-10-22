@@ -9,13 +9,14 @@ class SpielReply {
     this.line = line;
     this.matchCriteria = matchCriteria;
   }
+  
+  nextDialogue():string {
+    return this.line.nextDialogue();
+  }
 }
 
 export function duplicateSpielReply(from:SpielReply):SpielReply {
-  return new SpielReply(
-    duplicateSpielLine(from.line),
-    [...from.matchCriteria]
-  );
+  return new SpielReply(duplicateSpielLine(from.line), [...from.matchCriteria]);
 }
 
 export function repairSpielReply(reply:SpielReply):boolean {

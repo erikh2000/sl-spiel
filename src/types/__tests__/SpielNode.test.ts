@@ -32,9 +32,10 @@ describe('SpielNode', () => {
     });
 
     it('fixes undefined line', () => {
-      const undefinedLine = undefined as unknown;
-      const node = { line:undefinedLine, replies:[]} as SpielNode;
+      const undefinedLine = (undefined as unknown) as SpielLine;
       const expected = new SpielNode(new SpielLine('',['']), []);
+      const node = duplicateSpielNode(expected);
+      node.line = undefinedLine;
       expect(repairSpielNode(node)).toBeTruthy();
       expect(node).toEqual(expected);
     });
@@ -70,6 +71,38 @@ describe('SpielNode', () => {
       const expected = { line, replies:fixedReplies } as SpielNode;
       expect(repairSpielNode(node)).toBeTruthy();
       expect(node).toEqual(expected);
+    });
+  });
+
+  describe('nextDialogue()', () => {
+    it('returns same text every time when only one dialogue text', () => {
+      const line = new SpielLine('BUBBA', ['Howdy!'], Emotion.HAPPY);
+      const node = new SpielNode(line, []);
+      for(let i = 0; i < 100; ++i) {
+        expect(node.nextDialogue()).toEqual('Howdy!');
+      }
+    });
+
+    it('returns alternating text when there are 2 texts', () => {
+      const line = new SpielLine('BUBBA', ['Howdy!', 'Hello!'], Emotion.HAPPY);
+      const node = new SpielNode(line, []);
+      let lastText = node.nextDialogue(); 
+      for(let i = 0; i < 100; ++i) {
+        const text = node.nextDialogue();
+        expect(text !== lastText);
+        lastText = text;
+      }
+    });
+
+    it('returns non-repeating text when there are 3 texts', () => {
+      const line = new SpielLine('BUBBA', ['Howdy!', 'Hello!', 'Hi!'], Emotion.HAPPY);
+      const node = new SpielNode(line, []);
+      let lastText = node.nextDialogue();
+      for(let i = 0; i < 100; ++i) {
+        const text = node.nextDialogue();
+        expect(text !== lastText);
+        lastText = text;
+      }
     });
   });
 });

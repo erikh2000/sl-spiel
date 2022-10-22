@@ -5,11 +5,22 @@ class SpielLine {
   character: string;
   dialogue: string[];
   emotion: Emotion;
+  lastDialogueNo: number;
   
   constructor(character:string, dialogue:string[], emotion:Emotion = Emotion.NEUTRAL) {
     this.character = character;
     this.dialogue = dialogue;
     this.emotion = emotion;
+    this.lastDialogueNo = 0;
+  }
+  
+  /* If only one dialogue text is present, returns that. Otherwise, returns randomly
+     chosen dialogue text that is not the same as last returned. */
+  nextDialogue():string {
+    if (this.dialogue.length === 1) return this.dialogue[0];
+    const randomOffset = Math.floor((Math.random() * (this.dialogue.length - 1))) + 1;
+    this.lastDialogueNo = (this.lastDialogueNo + randomOffset) % this.dialogue.length;
+    return this.dialogue[this.lastDialogueNo];
   }
 }
 

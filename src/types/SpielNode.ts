@@ -10,6 +10,10 @@ class SpielNode {
     this.line = line;
     this.replies = replies;
   }
+  
+  nextDialogue():string {
+    return this.line.nextDialogue();
+  }
 }
 
 export function duplicateSpielNode(from:SpielNode) {
