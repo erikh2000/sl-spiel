@@ -24,7 +24,7 @@ In interactive games, the Spiel is a useful tool in giving a sense of human inte
 The code below creates a new spiel populated with two nodes containing lines of dialogue for a Biff character to say. The call to `addReply()` after the first node will cause Biff to reply "Lots and lots of things!" if the user says something that matches one of 3 keyphrases. 
 
 ```
-import { Spiel } from 'spiel-lib';
+import { Spiel } from 'sl-spiel';
 
 const spiel = new Spiel();
 spiel.createNode('BIFF', Emotion.IRRITATED, 'I've got a lot of things to say.');
@@ -37,7 +37,7 @@ spiel.createNode('BIFF', Emotion.NEUTRAL, 'The first thing is...');
 Root replies work the same as replies, except that matching for them is active on every node.
 
 ```
-import { Spiel } from 'spiel-lib';
+import { Spiel } from 'sl-spiel';
 
 const spiel = new Spiel();
 spiel.addRootReply('shut up', 'No, you shut up!', 'BIFF', Emotion.ANGRY);
@@ -46,7 +46,7 @@ spiel.addRootReply('shut up', 'No, you shut up!', 'BIFF', Emotion.ANGRY);
 ### Exporting a Spiel to a SpielFile.
 
 ```
-import { Spiel, exportSpielFile } from 'spiel-lib';
+import { Spiel, exportSpielFile } from 'sl-spiel';
 
 const spiel = new Spiel();
 spiel.createNode('BIFF', Emotion.IRRITATED, 'I've got a lot of things to say.');
@@ -61,7 +61,7 @@ const text = exportSpielFile(spiel);
 // Next line would work if you have a WebPack loader set up for yaml files, but any
 // means of reading the text of a spielfile into a string can be used.
 import spielFileText from 'spielFiles/example.spiel.yaml'; 
-import { importSpielFile, Spiel } from 'spiel-lib'; 
+import { importSpielFile, Spiel } from 'sl-spiel'; 
 
 const spiel = importSpielFile(spielFileText);
 ```
@@ -69,7 +69,7 @@ const spiel = importSpielFile(spielFileText);
 ### Traversing a Spiel and Checking for Matches
 
 ```
-import { Spiel } from 'spiel-lib';
+import { Spiel } from 'sl-spiel';
 
 const spiel = new Spiel();
 spiel.createNode('BIFF', Emotion.IRRITATED, 'I've got a lot of things to say.');
@@ -87,7 +87,7 @@ if (reply) console.log(reply.nextDialogue()); // "Lots and lots of things!"
 Often, you want to have variants of the same phrase to avoid character dialogue feeling too repetitious. The `.nextDialogue()` method of nodes and replies, can choose a random dialogue text if you have specificied multiple dialogues texts for a node or reply.
 
 ```
-import { Spiel } from 'spiel-lib';
+import { Spiel } from 'sl-spiel';
 const spiel = new Spiel();
 spiel.createNode('BIFF', Emotion.IRRITATED, 'I've got a lot of things to say. / There is so much I can tell you.');
 
