@@ -11,7 +11,7 @@ In interactive games, the Spiel is a useful tool in giving a sense of human inte
 
 ## Features
 
-* Serialize and deserialize the YAML-based Spiel format.
+* Serialize and deserialize the YAML-based Spielfile format.
 * Character and emotion associated with lines.
 * Traversing, querying, and processing a Spiel.
 * Generate keyword matchers that efficiently check which replies match keyword inputs.
@@ -19,33 +19,84 @@ In interactive games, the Spiel is a useful tool in giving a sense of human inte
 
 ## Usage
 
+### Creating a New Spiel from Scratch
 
+The code below creates a new spiel populated with two nodes containing lines of dialogue for a Biff character to say. The call to `addReply()` after the first node will cause Biff to reply "Lots and lots of things!" if the user says something that matches one of 3 keyphrases. 
 
+```
+import { Spiel } from 'spiel-lib';
+
+const spiel = new Spiel();
+spiel.createNode('BIFF', Emotion.IRRITATED, 'I've got a lot of things to say.');
+spiel.addReply('like what / what...things / what...say', 'Lots and lots of things!');
+spiel.createNode('BIFF', Emotion.NEUTRAL, 'The first thing is...');
+```
+
+### Adding Root Replies
+
+Root replies work the same as replies, except that matching for them is active on every node.
+
+```
+import { Spiel } from 'spiel-lib';
+
+const spiel = new Spiel();
+spiel.addRootReply('shut up', 'No, you shut up!', 'BIFF', Emotion.ANGRY);
+```
+
+### Exporting a Spiel to a SpielFile.
+
+```
+import { Spiel, exportSpielFile } from 'spiel-lib';
+
+const spiel = new Spiel();
+spiel.createNode('BIFF', Emotion.IRRITATED, 'I've got a lot of things to say.');
+const text = exportSpielFile(spiel);
+// Write text to a file, using file I/O. Or save to IndexedDB, post to a service endpoint, etc.
+
+```
+
+### Importing a Spiel from a SpielFile.
+
+```
+// Next line would work if you have a WebPack loader set up for yaml files, but any
+// means of reading the text of a spielfile into a string can be used.
+import spielFileText from 'spielFiles/example.spiel.yaml'; 
+import { importSpielFile, Spiel } from 'spiel-lib'; 
+
+const spiel = importSpielFile(spielFileText);
+```
+
+### Traversing a Spiel and Checking for Matches
+
+```
+import { Spiel } from 'spiel-lib';
+
+const spiel = new Spiel();
+spiel.createNode('BIFF', Emotion.IRRITATED, 'I've got a lot of things to say.');
+spiel.addReply('like what / what...things / what...say', 'Lots and lots of things!');
+spiel.createNode('BIFF', Emotion.NEUTRAL, 'The first thing is...');
+
+spiel.moveFirst(); // There's also similar methods for moving to next, previous, last, and indexed-based nodes.
+console.log(spiel.currentNode.nextDialogue()); // "I've got a lot of things to say."
+const reply = spiel.checkForMatch('what do you have to say');
+if (reply) console.log(reply.nextDialogue()); // "Lots and lots of things!"
+```
+
+### Adding Random Variants to Dialogue
+
+Often, you want to have variants of the same phrase to avoid character dialogue feeling too repetitious. The `.nextDialogue()` method of nodes and replies, can choose a random dialogue text if you have specificied multiple dialogues texts for a node or reply.
+
+```
+import { Spiel } from 'spiel-lib';
+const spiel = new Spiel();
+spiel.createNode('BIFF', Emotion.IRRITATED, 'I've got a lot of things to say. / There is so much I can tell you.');
+
+spiel.moveFirst();
+console.log(spiel.currentNode.nextDialogue()); // "I've got a lot of things to say."
+console.log(spiel.currentNode.nextDialogue()); // "There is so much I can tell you."
+```
 
 ## Non-Goals and Architectural Boundaries
 
 * DOES NOT include presentational functionality.
 * DOES NOT include I/O functionality, e.g. audio, user input, files, HTTP.
-* Includes a basic iterator to traverse spiel, but is otherwise agnostic to the state of the spiel during a conversation. Library caller must create whatever state machine logic is appropriate for spiel traversal.
-
-## Data Structure
-
-SPIEL = 
-* 0+ NODE
-* 0+ Root REPLIES
-* Default Character (string)
-* Next Node ID (number)
-
-REPLY =
-* LINE
-* Match Criteria (string[])
-
-NODE = 
-* Node ID (number)
-* LINE
-* 0+ REPLIES
-
-LINE =
-* Character (string)
-* Dialogue (string[])
-* Emotion (enum)
