@@ -46,3 +46,20 @@ export function splitAndTrimText(textToSplit:string, separator:string):string[] 
     .map(word => word.trim())
     .filter(word => word.length > 0);
 }
+
+export function splitByMultipleSeparators(textToSplit:string, separators:string[]):string[] {
+  const fields:string[] = [];
+  let i = 0, field = '';
+  while(i < textToSplit.length) {
+    const c = textToSplit[i];
+    if (separators.includes(c)) {
+      fields.push(field);
+      field = '';
+    } else {
+      field += c;
+    }
+    ++i;
+  }
+  fields.push(field);
+  return fields;
+}

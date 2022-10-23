@@ -1,6 +1,7 @@
 import {
   joinText,
   splitAndTrimText,
+  splitByMultipleSeparators,
   splitText,
   splitTextToWordsWithTrailingSeparator,
   summarizeTextArray
@@ -213,7 +214,7 @@ describe('textFormatUtil', () => {
     });
   });
 
-  describe('summarizeTextArray', () => {
+  describe('summarizeTextArray()', () => {
     it('returns empty string for empty array', () => {
       const textArray:string[] = [];
       const expected = '';
@@ -233,6 +234,32 @@ describe('textFormatUtil', () => {
       const expected = 'dog+2';
       const summary = summarizeTextArray(textArray);
       expect(summary).toEqual(expected);
+    });
+  });
+  
+  describe('splitByMultipleSeparators()', () => {
+    it('returns array with one element when empty string passed', () => {
+      const text = '';
+      const expected = [''];
+      const separators = ['/', ' '];
+      const tokens = splitByMultipleSeparators(text, separators);
+      expect(tokens).toEqual(expected);
+    });
+
+    it('returns array with one element when passed string with no separators', () => {
+      const text = 'unbreakable';
+      const expected = ['unbreakable'];
+      const separators = ['/', ' '];
+      const tokens = splitByMultipleSeparators(text, separators);
+      expect(tokens).toEqual(expected);
+    });
+
+    it('returns array with multiple elements when passed string with separators', () => {
+      const text = 'break a/ble';
+      const expected = ['break', 'a', 'ble'];
+      const separators = ['/', ' '];
+      const tokens = splitByMultipleSeparators(text, separators);
+      expect(tokens).toEqual(expected);
     });
   });
 });

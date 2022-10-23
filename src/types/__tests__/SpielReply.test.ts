@@ -43,8 +43,9 @@ describe('SpielReply', () => {
 
       it('fixes undefined match criteria', () => {
         const line = new SpielLine('BIFF', ['Hi', 'Howdy']);
-        const reply = { line } as SpielReply;
-        const expected = { line, matchCriteria: [] } as SpielReply;
+        const expected = new SpielReply(line, []);
+        const reply = duplicateSpielReply(expected);
+        reply.matchCriteria = (undefined as unknown) as string[];
         expect(repairSpielReply(reply)).toBeTruthy();
         expect(reply).toEqual(expected);
       });
