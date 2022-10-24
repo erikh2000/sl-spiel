@@ -2,9 +2,9 @@ import {
   findAdjacentNode,
   findCharacterWithMostLines
 } from "../findUtil";
-import Spiel from 'types/Spiel';
-import SpielLine from 'types/SpielLine';
-import SpielNode from 'types/SpielNode';
+import Spiel from '../../types/Spiel';
+import SpielLine from '../../types/SpielLine';
+import SpielNode from '../../types/SpielNode';
 
 describe('findUtil', () => {
   describe('findAdjacentNode', () => {

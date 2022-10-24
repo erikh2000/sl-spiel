@@ -38,8 +38,9 @@ describe('SpielLine', () => {
     });
 
     it('fixes empty dialogue array', () => {
-      const line = { character:'BIFF', dialogue:[], emotion:Emotion.NEUTRAL } as SpielLine;
-      const expected = { character:'BIFF', dialogue:[''], emotion:Emotion.NEUTRAL } as SpielLine;
+      const line = new SpielLine('BIFF', ['']);
+      const expected = duplicateSpielLine(line);
+      line.dialogue = [];
       expect(repairSpielLine(line)).toBeTruthy();
       expect(line).toEqual(expected);
     });
