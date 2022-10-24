@@ -1,5 +1,5 @@
-import Emotion from 'types/Emotion';
-import { removeEmptyElements } from 'common/arrayUtil';
+import Emotion from './Emotion';
+import { removeEmptyElements } from '../common/arrayUtil';
 
 class SpielLine {
   character: string;

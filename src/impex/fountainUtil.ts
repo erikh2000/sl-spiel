@@ -1,11 +1,11 @@
-import fountain from '3rdParty/fountainJs';
-import {stripHtml} from 'common/htmlFormatUtil';
-import Emotion from "types/Emotion";
-import Spiel from 'types/Spiel';
-import SpielLine from "types/SpielLine";
-import SpielNode from 'types/SpielNode';
-import {findCharacterWithMostLines} from "analysis/findUtil";
-import {parentheticalToEmotion} from "impex/emotionUtil";
+import fountain from '../3rdParty/fountainJs';
+import {findCharacterWithMostLines} from "../analysis/findUtil";
+import {stripHtml} from '../common/htmlFormatUtil';
+import Emotion from "../types/Emotion";
+import Spiel from '../types/Spiel';
+import SpielLine from "../types/SpielLine";
+import SpielNode from '../types/SpielNode';
+import {parentheticalToEmotion} from "./emotionUtil";
 
 function _normalizeCharacter(character:string):string {
   const leftParenthesesI = character.indexOf('('); // Remove "(CONT'D)", "(VO)", and similar qualifiers.

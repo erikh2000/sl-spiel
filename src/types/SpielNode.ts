@@ -1,6 +1,6 @@
-import SpielLine, {duplicateSpielLine, repairSpielLine} from "types/SpielLine";
-import SpielReply, {duplicateSpielReply, repairSpielReply} from "types/SpielReply";
-import {removeEmptyElements} from "common/arrayUtil";
+import SpielLine, {duplicateSpielLine, repairSpielLine} from "./SpielLine";
+import SpielReply, {duplicateSpielReply, repairSpielReply} from "./SpielReply";
+import {removeEmptyElements} from "../common/arrayUtil";
 
 class SpielNode {
   line:SpielLine;

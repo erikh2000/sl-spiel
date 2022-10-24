@@ -1,5 +1,5 @@
 import MatchManager from "../MatchManager";
-import Spiel from "types/Spiel";
+import Spiel from "../../types/Spiel";
 
 // Functionality is tested through Spiel.checkForMatch(). Test below is getting code coverage on
 // on a debug error safeguard.

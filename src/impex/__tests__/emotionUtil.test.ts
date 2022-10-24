@@ -1,5 +1,5 @@
 import {emotionToParenthetical, parentheticalToEmotion} from "../emotionUtil";
-import Emotion from "types/Emotion";
+import Emotion from "../../types/Emotion";
 
 describe('emotionUtil', () => {
   describe('parentheticalToEmotion', () => {

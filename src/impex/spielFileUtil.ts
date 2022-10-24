@@ -1,10 +1,10 @@
-import Emotion from "types/Emotion";
-import Spiel from 'types/Spiel';
-import SpielNode from 'types/SpielNode';
-import SpielReply from 'types/SpielReply';
+import Emotion from "../types/Emotion";
+import Spiel from '../types/Spiel';
+import SpielLine from "../types/SpielLine";
+import SpielNode from '../types/SpielNode';
+import SpielReply from '../types/SpielReply';
 import {parse, stringify} from 'yaml';
 import {emotionToParenthetical, parentheticalToEmotion} from "./emotionUtil";
-import SpielLine from "../types/SpielLine";
 
 function _emotionToParenthetical(emotion:Emotion):string {
   if (emotion === Emotion.NEUTRAL) return '';

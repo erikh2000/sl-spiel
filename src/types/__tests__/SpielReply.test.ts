@@ -1,7 +1,6 @@
 import SpielReply, { duplicateSpielReply, repairSpielReply } from '../SpielReply';
-import SpielLine from 'types/SpielLine';
-import Emotion from 'types/Emotion';
-import SpielNode from "../SpielNode";
+import SpielLine from '../SpielLine';
+import Emotion from '../Emotion';
 
 describe('SpielReply', () => {
   describe('duplicateSpielReply()', () => {

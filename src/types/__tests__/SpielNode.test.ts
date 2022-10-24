@@ -1,7 +1,7 @@
 import SpielNode, { duplicateSpielNode, repairSpielNode } from '../SpielNode';
-import Emotion from 'types/Emotion';
-import SpielReply from 'types/SpielReply';
-import SpielLine from 'types/SpielLine';
+import Emotion from '../Emotion';
+import SpielReply from '../SpielReply';
+import SpielLine from '../SpielLine';
 
 describe('SpielNode', () => {
   describe('duplicateSpielNode()', () => {

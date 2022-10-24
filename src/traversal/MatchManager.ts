@@ -1,12 +1,12 @@
-import Spiel from "types/Spiel";
-import SpielReply from "types/SpielReply";
+import Spiel from "../types/Spiel";
+import SpielReply from "../types/SpielReply";
 import {
   createMatchRulesetFromCriterion,
   createWordPositionMap,
   IMatchRuleset,
   matchesRulesetInWordPositionMap,
   WordPositionMap
-} from "traversal/matchUtil";
+} from "./matchUtil";
 
 interface IMatcher {
   ruleset:IMatchRuleset,

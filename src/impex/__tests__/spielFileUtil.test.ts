@@ -1,8 +1,8 @@
 import {exportSpielFile, importSpielFile} from "../spielFileUtil";
-import Spiel from "types/Spiel";
-import SpielNode from "types/SpielNode";
-import SpielLine from "types/SpielLine";
-import SpielReply from "types/SpielReply";
+import Spiel from "../../types/Spiel";
+import SpielNode from "../../types/SpielNode";
+import SpielLine from "../../types/SpielLine";
+import SpielReply from "../../types/SpielReply";
 import emptySpielText from "../__snapshots__/emptySpiel";
 import fullSpielText from "../__snapshots__/fullSpiel";
 import Emotion from "../../types/Emotion";

@@ -1,5 +1,5 @@
 import SpielLine, {duplicateSpielLine, repairSpielLine} from '../SpielLine';
-import Emotion from 'types/Emotion';
+import Emotion from '../Emotion';
 
 describe('SpielLine', () => {
   describe('duplicateSpielLine()', () => {

@@ -1,11 +1,11 @@
-import {findCharacterWithMostLines} from "analysis/findUtil";
-import {removeEmptyElements} from "common/arrayUtil";
-import {splitText} from "common/textFormatUtil";
-import Emotion from 'types/Emotion';
-import MatchManager from "traversal/MatchManager";
-import SpielNode, {duplicateSpielNode, repairSpielNode} from 'types/SpielNode';
-import SpielReply, {duplicateSpielReply, repairSpielReply} from 'types/SpielReply';
-import SpielLine from "types/SpielLine";
+import {findCharacterWithMostLines} from "../analysis/findUtil";
+import {removeEmptyElements} from "../common/arrayUtil";
+import {splitText} from "../common/textFormatUtil";
+import Emotion from './Emotion';
+import MatchManager from "../traversal/MatchManager";
+import SpielNode, {duplicateSpielNode, repairSpielNode} from './SpielNode';
+import SpielReply, {duplicateSpielReply, repairSpielReply} from './SpielReply';
+import SpielLine from "./SpielLine";
 
 function _duplicateSpiel(from:Spiel):Spiel {
     const spiel = new Spiel();
@@ -100,6 +100,14 @@ class Spiel {
         if (!this.hasPrevious) return;
         --this.currentNodeIndex;
     }
+    
+    movePreviousLooped() {
+        if (this.hasPrevious) {
+            --this.currentNodeIndex;
+        } else {
+            this.moveLast();
+        }
+    }
 
     get hasNext() {
         return (this.currentNodeIndex < this.nodes.length-1 && this.nodes.length > 0);
@@ -108,6 +116,14 @@ class Spiel {
     moveNext() {
         if (!this.hasNext) return;
         ++this.currentNodeIndex;
+    }
+    
+    moveNextLooped() {
+        if (this.hasNext) {
+            ++this.currentNodeIndex;
+        } else {
+            this.moveFirst();
+        }
     }
 
     moveLast() {

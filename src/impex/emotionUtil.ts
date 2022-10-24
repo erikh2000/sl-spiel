@@ -1,6 +1,6 @@
-import Emotion, {emotionNames} from 'types/Emotion';
-import {splitAndTrimText} from "common/textFormatUtil";
-import unprocessedWordToEmotionMap from "impex/wordToEmotionMap.json";
+import Emotion, {emotionNames} from '../types/Emotion';
+import {splitAndTrimText} from "../common/textFormatUtil";
+import unprocessedWordToEmotionMap from "./wordToEmotionMap.json";
 
 type WordToEmotionMap = {
   [word: string]: Emotion;

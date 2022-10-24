@@ -1,5 +1,5 @@
-import Spiel from 'types/Spiel';
-import SpielNode from 'types/SpielNode';
+import Spiel from '../types/Spiel';
+import SpielNode from '../types/SpielNode';
 
 export function findAdjacentNode(spiel:Spiel, nodeIndex:number):SpielNode | null {
   if (!spiel.nodes.length) throw Error('Spiel is empty.');

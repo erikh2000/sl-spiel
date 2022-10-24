@@ -1,5 +1,5 @@
-import SpielLine, {duplicateSpielLine, repairSpielLine} from 'types/SpielLine';
-import { removeEmptyElements } from 'common/arrayUtil';
+import SpielLine, {duplicateSpielLine, repairSpielLine} from './SpielLine';
+import { removeEmptyElements } from '../common/arrayUtil';
 
 class SpielReply {
   line: SpielLine;

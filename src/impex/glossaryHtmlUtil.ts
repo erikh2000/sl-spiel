@@ -1,5 +1,5 @@
-import Spiel from 'types/Spiel';
-import { findTagContents } from "common/htmlParseUtil";
+import Spiel from '../types/Spiel';
+import { findTagContents } from "../common/htmlParseUtil";
 import {stripHtml} from "../common/htmlFormatUtil";
 import {splitAndTrimText, splitByMultipleSeparators} from "../common/textFormatUtil";
 

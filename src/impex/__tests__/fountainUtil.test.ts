@@ -1,9 +1,9 @@
 import {importFountain} from "../fountainUtil";
 import emptyFountainText from "../__snapshots__/emptyFountain";
 import fullFountainText from "../__snapshots__/fullFountain";
-import Emotion from 'types/Emotion';
-import SpielNode from "types/SpielNode";
-import SpielLine from "types/SpielLine";
+import Emotion from '../../types/Emotion';
+import SpielNode from "../../types/SpielNode";
+import SpielLine from "../../types/SpielLine";
 
 describe('fountainUtil', () => {
   describe('loadSpielFromText()', () => {

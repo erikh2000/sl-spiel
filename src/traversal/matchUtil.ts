@@ -1,4 +1,4 @@
-import {splitAndTrimText} from "common/textFormatUtil";
+import {splitAndTrimText} from "../common/textFormatUtil";
 
 /*
   Match format is designed with these goals:

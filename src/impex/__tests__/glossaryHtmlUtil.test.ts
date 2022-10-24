@@ -1,6 +1,6 @@
 import {SNAPSHOT as MEDIAWIKI_HTML} from '../__snapshots__/mediawikiGlossary';
 import {importGlossaryHtml} from "../glossaryHtmlUtil";
-import SpielReply from 'types/SpielReply';
+import SpielReply from '../../types/SpielReply';
 
 function _replyContains(reply:SpielReply|null, checkText:string) {
   if (!reply) { console.error('Reply is null'); return false;}

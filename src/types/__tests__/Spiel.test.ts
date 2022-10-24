@@ -1,7 +1,7 @@
 import Spiel, {repairSpiel} from '../Spiel';
-import Emotion from 'types/Emotion';
-import SpielNode from 'types/SpielNode';
-import SpielReply from 'types/SpielReply';
+import Emotion from '../Emotion';
+import SpielNode from '../SpielNode';
+import SpielReply from '../SpielReply';
 
 function _getCode(reply:SpielReply | null):string | null {
   return reply === null ? null : reply.line.dialogue[0];
@@ -390,6 +390,30 @@ describe('Spiel', () => {
       spiel.createNode('BUBBA', Emotion.NEUTRAL, '2');
       spiel.moveFirst();
       expect(spiel.hasNext).toBeTruthy();
+    });
+
+    it('moving next looped works', () => {
+      const spiel = new Spiel();
+      spiel.createNode('BUBBA', Emotion.NEUTRAL, '0');
+      spiel.createNode('BUBBA', Emotion.NEUTRAL, '1');
+      spiel.createNode('BUBBA', Emotion.NEUTRAL, '2');
+      spiel.moveLast();
+      spiel.moveNextLooped();
+      expect(spiel.currentNode?.line.dialogue).toEqual(['0']);
+      spiel.moveNextLooped();
+      expect(spiel.currentNode?.line.dialogue).toEqual(['1']);
+    });
+
+    it('moving previous looped works', () => {
+      const spiel = new Spiel();
+      spiel.createNode('BUBBA', Emotion.NEUTRAL, '0');
+      spiel.createNode('BUBBA', Emotion.NEUTRAL, '1');
+      spiel.createNode('BUBBA', Emotion.NEUTRAL, '2');
+      spiel.moveFirst();
+      spiel.movePreviousLooped();
+      expect(spiel.currentNode?.line.dialogue).toEqual(['2']);
+      spiel.movePreviousLooped();
+      expect(spiel.currentNode?.line.dialogue).toEqual(['1']);
     });
   });
   
