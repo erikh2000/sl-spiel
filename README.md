@@ -100,3 +100,13 @@ console.log(spiel.currentNode.nextDialogue()); // "There is so much I can tell y
 
 * DOES NOT include presentational functionality.
 * DOES NOT include I/O functionality, e.g. audio, user input, files, HTTP.
+
+### Contributing
+
+The project isn't open to contributions at this point. But that could change. Contact me if you'd like to collaborate.
+
+### Contacting
+
+You can reach me on LinkedIn. I'll accept connections if you will just mention "SL Spiel" or some other shared interest in your connection request.
+
+https://www.linkedin.com/in/erikhermansen/
