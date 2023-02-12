@@ -864,4 +864,50 @@ describe('Spiel', () => {
       expect(spiel.currentNode?.line?.dialogue[0]).toEqual('a');
     });
   });
+  
+  describe('createNode()', () => {
+    it('creates a node', () => {
+      const spiel = new Spiel();
+      spiel.createNode();
+      expect(spiel.currentNode).not.toBeNull();
+    });
+    
+    it('creates a node with a character', () => {
+      const spiel = new Spiel();
+      spiel.createNode('BIFF');
+      expect(spiel.currentNode?.line?.character).toEqual('BIFF');
+    });
+    
+    it('creates a node with an emotion', () => {
+      const spiel = new Spiel();
+      spiel.createNode('BIFF', Emotion.HAPPY);
+      expect(spiel.currentNode?.line?.emotion).toEqual(Emotion.HAPPY);
+    });
+    
+    it('creates a node with a line', () => {
+      const spiel = new Spiel();
+      spiel.createNode('BIFF', Emotion.HAPPY, 'a');
+      expect(spiel.currentNode?.line?.dialogue[0]).toEqual('a');
+    });
+    
+    it('creates a node after other nodes', () => {
+      const spiel = new Spiel();
+      spiel.createNode('BIFF', Emotion.HAPPY, 'a');
+      spiel.createNode('BIFF', Emotion.HAPPY, 'b');
+      expect(spiel.currentNode?.line?.dialogue[0]).toEqual('b');
+    });
+
+    it('creates a node inserted between other nodes', () => {
+      const spiel = new Spiel();
+      spiel.createNode('BIFF', Emotion.HAPPY, 'a');
+      spiel.createNode('BIFF', Emotion.HAPPY, 'c');
+      spiel.moveFirst();
+      spiel.createNode('BIFF', Emotion.HAPPY, 'b');
+      expect(spiel.currentNode?.line?.dialogue[0]).toEqual('b');
+      spiel.moveNext();
+      expect(spiel.currentNode?.line?.dialogue[0]).toEqual('c');
+      spiel.moveNextLooped();
+      expect(spiel.currentNode?.line?.dialogue[0]).toEqual('a');
+    });
+  });
 });

@@ -156,8 +156,13 @@ class Spiel {
         if (!dialogue) dialogue = DIALOGUE_PLACEHOLDER;
         if (typeof dialogue === 'string') dialogue = splitText(dialogue);
         const node = new SpielNode(new SpielLine(character, dialogue, emotion), []);
-        this.nodes.push(node);
-        this.moveLast();
+        if (this.currentNodeIndex < this.nodes.length - 1) {
+            this.nodes.splice(this.currentNodeIndex+1, 0, node);
+            this.moveNext();
+        } else {
+            this.nodes.push(node);
+            this.moveLast();
+        }
         this.refreshMatching();
     }
     
