@@ -166,6 +166,14 @@ class Spiel {
         this.refreshMatching();
     }
     
+    moveNode(nodeIndex:number, newIndex:number) {
+        if (nodeIndex < 0 || nodeIndex >= this.nodes.length) throw Error('Invalid node index');
+        if (newIndex < 0 || newIndex >= this.nodes.length) throw Error('Invalid new index');
+        const node = this.nodes[nodeIndex];
+        this.nodes.splice(nodeIndex, 1);
+        this.nodes.splice(newIndex, 0, node);
+    }
+    
     addDialogue(dialogue:string|string[]) {
         const node = this.currentNode;
         if (!node) throw Error('No current node');

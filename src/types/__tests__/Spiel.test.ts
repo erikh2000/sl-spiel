@@ -910,4 +910,65 @@ describe('Spiel', () => {
       expect(spiel.currentNode?.line?.dialogue[0]).toEqual('a');
     });
   });
+  
+  describe('moveNode()', () => {
+    it('does not change sequence of nodes when moving a node to the same index', () => {
+      const spiel = new Spiel();
+      spiel.createNode('BIFF', Emotion.HAPPY, 'a');
+      spiel.createNode('BIFF', Emotion.HAPPY, 'b');
+      spiel.createNode('BIFF', Emotion.HAPPY, 'c');
+      spiel.moveNode(1, 1);
+      spiel.moveFirst();
+      expect(spiel.currentNode?.line?.dialogue[0]).toEqual('a');
+      spiel.moveNext();
+      expect(spiel.currentNode?.line?.dialogue[0]).toEqual('b');
+      spiel.moveNext();
+      expect(spiel.currentNode?.line?.dialogue[0]).toEqual('c');
+    });
+    
+    it('moves a node to the end of the sequence', () => {
+      const spiel = new Spiel();
+      spiel.createNode('BIFF', Emotion.HAPPY, 'a');
+      spiel.createNode('BIFF', Emotion.HAPPY, 'b');
+      spiel.createNode('BIFF', Emotion.HAPPY, 'c');
+      spiel.moveNode(0, 2);
+      spiel.moveFirst();
+      expect(spiel.currentNode?.line?.dialogue[0]).toEqual('b');
+      spiel.moveNext();
+      expect(spiel.currentNode?.line?.dialogue[0]).toEqual('c');
+      spiel.moveNext();
+      expect(spiel.currentNode?.line?.dialogue[0]).toEqual('a');
+    });
+    
+    it('moves a node to the beginning of the sequence', () => {
+      const spiel = new Spiel();
+      spiel.createNode('BIFF', Emotion.HAPPY, 'a');
+      spiel.createNode('BIFF', Emotion.HAPPY, 'b');
+      spiel.createNode('BIFF', Emotion.HAPPY, 'c');
+      spiel.moveNode(2, 0);
+      spiel.moveFirst();
+      expect(spiel.currentNode?.line?.dialogue[0]).toEqual('c');
+      spiel.moveNext();
+      expect(spiel.currentNode?.line?.dialogue[0]).toEqual('a');
+      spiel.moveNext();
+      expect(spiel.currentNode?.line?.dialogue[0]).toEqual('b');
+    });
+    
+    it('moves a node to the middle of the sequence', () => {
+      const spiel = new Spiel();
+      spiel.createNode('BIFF', Emotion.HAPPY, 'a');
+      spiel.createNode('BIFF', Emotion.HAPPY, 'b');
+      spiel.createNode('BIFF', Emotion.HAPPY, 'c');
+      spiel.createNode('BIFF', Emotion.HAPPY, 'd');
+      spiel.moveNode(0, 2);
+      spiel.moveFirst();
+      expect(spiel.currentNode?.line?.dialogue[0]).toEqual('b');
+      spiel.moveNext();
+      expect(spiel.currentNode?.line?.dialogue[0]).toEqual('c');
+      spiel.moveNext();
+      expect(spiel.currentNode?.line?.dialogue[0]).toEqual('a');
+      spiel.moveNext();
+      expect(spiel.currentNode?.line?.dialogue[0]).toEqual('d');
+    });
+  });
 });
