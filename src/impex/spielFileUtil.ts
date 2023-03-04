@@ -5,6 +5,7 @@ import SpielNode from '../types/SpielNode';
 import SpielReply from '../types/SpielReply';
 import {parse, stringify} from 'yaml';
 import {emotionToParenthetical, parentheticalToEmotion} from "./emotionUtil";
+import {assignSpeechIds} from "../common/speechIdUtil";
 
 function _emotionToParenthetical(emotion:Emotion):string {
   if (emotion === Emotion.NEUTRAL) return '';
@@ -123,6 +124,7 @@ function _storableToRuntime(storableSpiel:any):Spiel {
   spiel.nodes = _storableNodesToRuntime(storableSpiel.nodes);
   spiel.rootReplies = _storableRepliesToRuntime(storableSpiel.rootReplies);
   spiel.defaultCharacter = storableSpiel.defaultCharacter;
+  assignSpeechIds(spiel);
   return spiel;
 }
 

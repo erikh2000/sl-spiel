@@ -970,5 +970,23 @@ describe('Spiel', () => {
       spiel.moveNext();
       expect(spiel.currentNode?.line?.dialogue[0]).toEqual('d');
     });
+    
+    it('throws when moving a node to an index that is out of bounds', () => {
+      const spiel = new Spiel();
+      spiel.createNode('BIFF', Emotion.HAPPY, 'a');
+      spiel.createNode('BIFF', Emotion.HAPPY, 'b');
+      spiel.createNode('BIFF', Emotion.HAPPY, 'c');
+      expect(() => spiel.moveNode(0, 3)).toThrow();
+      expect(() => spiel.moveNode(0, -1)).toThrow();
+    });
+
+    it('throws when moving a node where index is out of bounds', () => {
+      const spiel = new Spiel();
+      spiel.createNode('BIFF', Emotion.HAPPY, 'a');
+      spiel.createNode('BIFF', Emotion.HAPPY, 'b');
+      spiel.createNode('BIFF', Emotion.HAPPY, 'c');
+      expect(() => spiel.moveNode(-1, 0)).toThrow();
+      expect(() => spiel.moveNode(3, 0)).toThrow();
+    });
   });
 });

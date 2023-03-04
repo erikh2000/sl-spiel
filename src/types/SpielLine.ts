@@ -4,12 +4,14 @@ import { removeEmptyElements } from '../common/arrayUtil';
 class SpielLine {
   character: string;
   dialogue: string[];
+  speechIds: string[];
   emotion: Emotion;
   lastDialogueNo: number;
   
   constructor(character:string, dialogue:string[], emotion:Emotion = Emotion.NEUTRAL) {
     this.character = character;
     this.dialogue = dialogue;
+    this.speechIds = [];
     this.emotion = emotion;
     this.lastDialogueNo = 0;
   }
@@ -25,7 +27,10 @@ class SpielLine {
 }
 
 export function duplicateSpielLine(from:SpielLine):SpielLine {
-    return new SpielLine(from.character, from.dialogue, from.emotion);
+    const duplicate = new SpielLine(from.character, from.dialogue, from.emotion);
+    duplicate.speechIds = from.speechIds;
+    duplicate.lastDialogueNo = from.lastDialogueNo;
+    return duplicate;
 }
 
 export function repairSpielLine(line:SpielLine):boolean {
