@@ -1,6 +1,8 @@
 import Emotion from './Emotion';
 import { removeEmptyElements } from '../common/arrayUtil';
 
+export const PLAYER_CHARACTER_NAME = 'PLAYER';
+
 class SpielLine {
   character: string;
   dialogue: string[];
