@@ -9,13 +9,24 @@ const EMOTION_SIZE = 1;
 const OCCURRENCE_SIZE = 1;
 const FIXED_SIZE = EMOTION_SIZE + OCCURRENCE_SIZE + (SEPARATOR_SIZE * 2);
 
+function _normalizeDialogueText(dialogueText:string):string {
+  let text = dialogueText.trim().toLowerCase();
+  
+  // Remove punctuation.
+  text = text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+  
+  // Remove extra white space
+  return text.replace(/\s{2,}/g," ");
+}
+
 function _generateSpeechIdBytes(emotion:Emotion, dialogueText:string, occurrenceNo:number):Uint8Array {
-  const byteCount = FIXED_SIZE + dialogueText.length;
+  const normalizedDialogueText = _normalizeDialogueText(dialogueText);
+  const byteCount = FIXED_SIZE + normalizedDialogueText.length;
   const bytes = new Uint8Array(byteCount);
   let i = 0;
   bytes[i++] = emotion;
   bytes[i++] = SEPARATOR_CHAR;
-  for (let j = 0; j < dialogueText.length; ++j) { bytes[i++] = dialogueText.charCodeAt(j); }
+  for (let j = 0; j < normalizedDialogueText.length; ++j) { bytes[i++] = normalizedDialogueText.charCodeAt(j); }
   bytes[i++] = SEPARATOR_CHAR;
   bytes[i++] = occurrenceNo;
   return bytes;

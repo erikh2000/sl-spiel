@@ -40,9 +40,9 @@ describe('spielFileUtil', () => { // TODO  fix failing tests
   it('creates a populated spiel', () => {
     const expected = {
       nodes:[{
-        line:{character:"BIFF",dialogue:["Hey."],emotion:Emotion.AMUSED,lastDialogueNo:0,speechIds:['dfa5']},
+        line:{character:"BIFF",dialogue:["Hey."],emotion:Emotion.AMUSED,lastDialogueNo:0,speechIds:['39f3']},
         replies:[{
-          line:{character:"BIFF",dialogue:["Hey hey!"],emotion:Emotion.NEUTRAL,lastDialogueNo:0,speechIds:['ccb6']},
+          line:{character:"BIFF",dialogue:["Hey hey!"],emotion:Emotion.NEUTRAL,lastDialogueNo:0,speechIds:['f2a8']},
           matchCriteria:["hey","hay"]
         }]
       },{
@@ -55,7 +55,7 @@ describe('spielFileUtil', () => { // TODO  fix failing tests
           dialogue:["Calm down!"],
           emotion:Emotion.AFRAID,
           lastDialogueNo:0,
-          speechIds:['85ef']
+          speechIds:['81f8']
         },
         matchCriteria:["shut up"]
       }],
