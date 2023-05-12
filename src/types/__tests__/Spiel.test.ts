@@ -141,6 +141,7 @@ describe('Spiel', () => {
       spiel.addRootReply([], 'x');
       spiel.addRootReply(['why', 'yay', 'baby'], 'y');
       spiel.addRootReply(['zee'], 'z');
+      spiel.addRootReply(['please]'], 'p');
       spiel.moveFirst();
     });
 
@@ -225,6 +226,129 @@ describe('Spiel', () => {
       spiel.addReply(['go', 'goo', 'gosh'], 'g');
       const reply = spiel.checkForMatch('goo');
       expect(_getCode(reply)).toEqual('g');
+    });
+    
+    it('does not match root reply with ] in it', () => {
+      spiel.moveTo(1);
+      const reply = spiel.checkForMatch('please');
+      expect(_getCode(reply)).toEqual(null);
+    });
+  });
+
+  describe('checkForMatchAfterSpeaking()', () => {
+    let spiel:Spiel;
+
+    beforeEach(() => {
+      spiel = new Spiel();
+      spiel.createNode('BUBBA', Emotion.NEUTRAL, '0');
+      spiel.addReply('ay', 'a');
+      spiel.createNode('BUBBA', Emotion.NEUTRAL, '1');
+      spiel.addReply('bee / baby', 'b');
+      spiel.createNode('BUBBA', Emotion.NEUTRAL, '2');
+      spiel.createNode('BUBBA', Emotion.NEUTRAL, '3');
+      spiel.addReply('see / sea', 'c');
+      spiel.addReply('dee / dead', 'd');
+      spiel.addRootReply([], 'x');
+      spiel.addRootReply(['why', 'yay', 'baby'], 'y');
+      spiel.addRootReply(['zee'], 'z');
+      spiel.addRootReply(['please]'], 'p');
+      spiel.moveFirst();
+    });
+
+    it('handles no match', () => {
+      const reply = spiel.checkForMatchAfterSpeaking('garuffalo');
+      expect(_getCode(reply)).toEqual(null);
+    });
+
+    it('does not match on a node when spiel has none', () => {
+      spiel = new Spiel();
+      const reply = spiel.checkForMatchAfterSpeaking('ay');
+      expect(_getCode(reply)).toEqual(null);
+    });
+
+    it('matches on root reply when no nodes', () => {
+      spiel = new Spiel();
+      spiel.addRootReply(['ay'], 'a');
+      const reply = spiel.checkForMatchAfterSpeaking('ay');
+      expect(_getCode(reply)).toEqual('a');
+    });
+
+    it('matches on current node', () => {
+      const reply = spiel.checkForMatchAfterSpeaking('ay');
+      expect(_getCode(reply)).toEqual('a');
+    });
+
+    it('does not match on current node when text does not match it', () => {
+      const reply = spiel.checkForMatchAfterSpeaking('bee');
+      expect(_getCode(reply)).toEqual(null);
+    });
+
+    it('does not match on node with no replies', () => {
+      spiel.moveTo(2);
+      const reply = spiel.checkForMatchAfterSpeaking('bee');
+      expect(_getCode(reply)).toEqual(null);
+    });
+
+    it('matches on node reply with one criterion', () => {
+      spiel.moveTo(0);
+      const reply = spiel.checkForMatchAfterSpeaking('ay baby');
+      expect(_getCode(reply)).toEqual('a');
+    });
+
+    it('matches first of two criteria', () => {
+      spiel.moveTo(1);
+      const reply = spiel.checkForMatchAfterSpeaking('bee');
+      expect(_getCode(reply)).toEqual('b');
+    });
+
+    it('matches second of two criteria', () => {
+      spiel.moveTo(1);
+      const reply = spiel.checkForMatchAfterSpeaking('baby');
+      expect(_getCode(reply)).toEqual('b');
+    });
+
+    it('matches earlier reply when multiple replies would match', () => {
+      spiel.moveTo(3);
+      const reply = spiel.checkForMatchAfterSpeaking('dead sea');
+      expect(_getCode(reply)).toEqual('c');
+    });
+
+    it('matches root reply', () => {
+      spiel.moveTo(2);
+      const reply = spiel.checkForMatchAfterSpeaking('why');
+      expect(_getCode(reply)).toEqual('y');
+    });
+
+    it('matches earlier root reply when multiple replies would match', () => {
+      spiel.moveTo(2);
+      const reply = spiel.checkForMatchAfterSpeaking('zee baby');
+      expect(_getCode(reply)).toEqual('y');
+    });
+
+    it('matches current node reply before root reply when either would match', () => {
+      spiel.moveTo(1);
+      const reply = spiel.checkForMatchAfterSpeaking('zee baby');
+      expect(_getCode(reply)).toEqual('b');
+    });
+
+    it('matches the same when called twice', () => {
+      spiel.moveTo(1);
+      spiel.checkForMatch('zee baby');
+      const reply = spiel.checkForMatchAfterSpeaking('zee baby');
+      expect(_getCode(reply)).toEqual('b');
+    });
+
+    it('matches for a newly added node', () => {
+      spiel.createNode('BUBBA', Emotion.NEUTRAL, '4');
+      spiel.addReply(['go', 'goo', 'gosh'], 'g');
+      const reply = spiel.checkForMatchAfterSpeaking('goo');
+      expect(_getCode(reply)).toEqual('g');
+    });
+
+    it('does not match on a node when spiel has none', () => {
+      spiel = new Spiel();
+      const reply = spiel.checkForMatchAfterSpeaking('ay');
+      expect(_getCode(reply)).toEqual(null);
     });
   });
   

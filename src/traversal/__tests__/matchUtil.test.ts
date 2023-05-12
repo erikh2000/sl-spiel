@@ -10,91 +10,91 @@ describe('matchUtil', () => {
   describe('createMatchRulesetFromCriterion()', () => {
     it('returns ruleset for empty criteria', () => {
       const criteria = '';
-      const expected:IMatchRuleset = {phrases:[], matchFromStart:false, matchToEnd:false};
+      const expected:IMatchRuleset = {phrases:[], matchFromStart:false, matchToEnd:false, lastPhraseMustBeAtEnd:false};
       const ruleset = createMatchRulesetFromCriterion(criteria);
       expect(ruleset).toEqual(expected);
     });
     
     it('returns ruleset for a single one-word phrase', () => {
       const criteria = 'thanks';
-      const expected:IMatchRuleset = {phrases:[['thanks']], matchFromStart:false, matchToEnd:false};
+      const expected:IMatchRuleset = {phrases:[['thanks']], matchFromStart:false, matchToEnd:false, lastPhraseMustBeAtEnd:false};
       const ruleset = createMatchRulesetFromCriterion(criteria);
       expect(ruleset).toEqual(expected);
     });
 
     it('returns ruleset for a single two-word phrase', () => {
       const criteria = 'thank you';
-      const expected:IMatchRuleset = {phrases:[['thank','you']], matchFromStart:false, matchToEnd:false};
+      const expected:IMatchRuleset = {phrases:[['thank','you']], matchFromStart:false, matchToEnd:false, lastPhraseMustBeAtEnd:false};
       const ruleset = createMatchRulesetFromCriterion(criteria);
       expect(ruleset).toEqual(expected);
     });
 
     it('returns ruleset reflecting match-from-start criteria', () => {
       const criteria = '[thank you';
-      const expected:IMatchRuleset = {phrases:[['thank','you']], matchFromStart:true, matchToEnd:false};
+      const expected:IMatchRuleset = {phrases:[['thank','you']], matchFromStart:true, matchToEnd:false, lastPhraseMustBeAtEnd:false};
       const ruleset = createMatchRulesetFromCriterion(criteria);
       expect(ruleset).toEqual(expected);
     });
 
     it('returns ruleset reflecting match-to-end criteria', () => {
       const criteria = 'thank you]';
-      const expected:IMatchRuleset = {phrases:[['thank','you']], matchFromStart:false, matchToEnd:true};
+      const expected:IMatchRuleset = {phrases:[['thank','you']], matchFromStart:false, matchToEnd:true, lastPhraseMustBeAtEnd:true};
       const ruleset = createMatchRulesetFromCriterion(criteria);
       expect(ruleset).toEqual(expected);
     });
 
     it('returns ruleset reflecting both match-from-start and match-to-end criteria', () => {
       const criteria = '[thank you]';
-      const expected:IMatchRuleset = {phrases:[['thank','you']], matchFromStart:true, matchToEnd:true};
+      const expected:IMatchRuleset = {phrases:[['thank','you']], matchFromStart:true, matchToEnd:true, lastPhraseMustBeAtEnd:true};
       const ruleset = createMatchRulesetFromCriterion(criteria);
       expect(ruleset).toEqual(expected);
     });
 
     it('trims whitespace outside of [ and ]', () => {
       const criteria = ' [thank you] ';
-      const expected:IMatchRuleset = {phrases:[['thank','you']], matchFromStart:true, matchToEnd:true};
+      const expected:IMatchRuleset = {phrases:[['thank','you']], matchFromStart:true, matchToEnd:true, lastPhraseMustBeAtEnd:true};
       const ruleset = createMatchRulesetFromCriterion(criteria);
       expect(ruleset).toEqual(expected);
     });
 
     it('trims whitespace inside of [ and ]', () => {
       const criteria = '[ thank you ]';
-      const expected:IMatchRuleset = {phrases:[['thank','you']], matchFromStart:true, matchToEnd:true};
+      const expected:IMatchRuleset = {phrases:[['thank','you']], matchFromStart:true, matchToEnd:true, lastPhraseMustBeAtEnd:true};
       const ruleset = createMatchRulesetFromCriterion(criteria);
       expect(ruleset).toEqual(expected);
     });
     
     it('treats all whitespace as empty criteria', () => {
       const criteria = '     ';
-      const expected:IMatchRuleset = {phrases:[], matchFromStart:false, matchToEnd:false};
+      const expected:IMatchRuleset = {phrases:[], matchFromStart:false, matchToEnd:false, lastPhraseMustBeAtEnd:false};
       const ruleset = createMatchRulesetFromCriterion(criteria);
       expect(ruleset).toEqual(expected);
     });
 
     it('treats all whitespace inside of [ and ] as empty criteria', () => {
       const criteria = '[     ]';
-      const expected:IMatchRuleset = {phrases:[], matchFromStart:true, matchToEnd:true};
+      const expected:IMatchRuleset = {phrases:[], matchFromStart:true, matchToEnd:true, lastPhraseMustBeAtEnd:true};
       const ruleset = createMatchRulesetFromCriterion(criteria);
       expect(ruleset).toEqual(expected);
     });
     
     it('returns ruleset with two phrases', () => {
       const criteria = 'thank...you';
-      const expected:IMatchRuleset = {phrases:[['thank'],['you']], matchFromStart:false, matchToEnd:false};
+      const expected:IMatchRuleset = {phrases:[['thank'],['you']], matchFromStart:false, matchToEnd:false, lastPhraseMustBeAtEnd:false};
       const ruleset = createMatchRulesetFromCriterion(criteria);
       expect(ruleset).toEqual(expected);
     });
 
     it('returns ruleset with two phrases stripping whitespace between', () => {
       const criteria = ' thank ... you ';
-      const expected:IMatchRuleset = {phrases:[['thank'],['you']], matchFromStart:false, matchToEnd:false};
+      const expected:IMatchRuleset = {phrases:[['thank'],['you']], matchFromStart:false, matchToEnd:false, lastPhraseMustBeAtEnd:false};
       const ruleset = createMatchRulesetFromCriterion(criteria);
       expect(ruleset).toEqual(expected);
     });
 
     it('returns ruleset with two phrases stripping whitespace between', () => {
       const criteria = ' thank ... you ';
-      const expected:IMatchRuleset = {phrases:[['thank'],['you']], matchFromStart:false, matchToEnd:false};
+      const expected:IMatchRuleset = {phrases:[['thank'],['you']], matchFromStart:false, matchToEnd:false, lastPhraseMustBeAtEnd:false};
       const ruleset = createMatchRulesetFromCriterion(criteria);
       expect(ruleset).toEqual(expected);
     });

@@ -145,7 +145,14 @@ class Spiel {
         if (!this.nodes.length && !this.rootReplies.length) return null;
         if (!this.matchManager) this.matchManager = new MatchManager(this);
         if (this.nodes.length) this.matchManager.setNode(this.currentNodeIndex);
-        return this.matchManager.checkForMatch(text);
+        return this.matchManager.checkForMatch(text, false);
+    }
+
+    checkForMatchAfterSpeaking(text:string):SpielReply | null {
+        if (!this.nodes.length && !this.rootReplies.length) return null;
+        if (!this.matchManager) this.matchManager = new MatchManager(this);
+        if (this.nodes.length) this.matchManager.setNode(this.currentNodeIndex);
+        return this.matchManager.checkForMatch(text, true);
     }
     
     createNode(character?:string, emotion?:Emotion, dialogue?:string|string[]) {

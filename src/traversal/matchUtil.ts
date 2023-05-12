@@ -24,7 +24,8 @@ type Phrase = string[];
 export interface IMatchRuleset {
   phrases:Phrase[],
   matchFromStart:boolean,
-  matchToEnd:boolean
+  matchToEnd:boolean,
+  lastPhraseMustBeAtEnd:boolean
 }
 
 type WordPositions = number[];
@@ -81,11 +82,12 @@ export function createMatchRulesetFromCriterion(matchCriterion:string):IMatchRul
   const trimmedCriterion = matchCriterion.trim();
   const matchFromStart = trimmedCriterion.startsWith('[');
   const matchToEnd = trimmedCriterion.endsWith(']');
+  const lastPhraseMustBeAtEnd = matchToEnd && !trimmedCriterion.endsWith('...]');
   const useCriteria:string = _stripAnchors(trimmedCriterion).trim();
-  if (useCriteria === '') return { matchFromStart, matchToEnd, phrases:[] };
+  if (useCriteria === '') return { lastPhraseMustBeAtEnd, matchFromStart, matchToEnd, phrases:[] };
   const wholePhrases = splitAndTrimText(useCriteria, '...');
   const phrases = wholePhrases.map(wholePhrase => splitAndTrimText(wholePhrase, ' '));
-  return { matchFromStart, matchToEnd, phrases };
+  return { lastPhraseMustBeAtEnd, matchFromStart, matchToEnd, phrases };
 }
 
 export function createWordPositionMap(text:string):WordPositionMap {
@@ -105,11 +107,11 @@ export function createWordPositionMap(text:string):WordPositionMap {
 }
 
 export function matchesRulesetInWordPositionMap(matchRuleset:IMatchRuleset, wordPositionMap:WordPositionMap) {
-  const { phrases, matchFromStart, matchToEnd } = matchRuleset;
+  const { lastPhraseMustBeAtEnd, phrases, matchFromStart, matchToEnd } = matchRuleset;
   if (!phrases.length) return false;
 
   if (matchFromStart && !_isFirstPhraseAtStart(phrases, wordPositionMap)) return false;
-  if (matchToEnd && !_isLastPhraseAtEnd(phrases, wordPositionMap)) return false;
+  if (lastPhraseMustBeAtEnd && !_isLastPhraseAtEnd(phrases, wordPositionMap)) return false;
 
   let lookFromWordNo = 0;
   for(let phraseI = 0; phraseI < phrases.length; ++phraseI) {

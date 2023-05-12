@@ -17,9 +17,10 @@ export type NodeMatchersMap = {
   [id: number]: IMatcher[];
 }
 
-function _findMatch(wordPositionMap:WordPositionMap, matchers:IMatcher[]):SpielReply | null {
+function _findMatch(wordPositionMap:WordPositionMap, matchers:IMatcher[], includeMatchToEnd:boolean):SpielReply | null {
   for(let i = 0; i < matchers.length; ++i) {
     const matcher = matchers[i];
+    if (matcher.ruleset.matchToEnd && !includeMatchToEnd) continue;
     if (matchesRulesetInWordPositionMap(matcher.ruleset, wordPositionMap)) {
       return matcher.reply;
     }
@@ -70,10 +71,10 @@ class MatchManager {
     this.currentNodeMatchers = matchers;
   }
 
-  checkForMatch(text:string):SpielReply | null {
+  checkForMatch(text:string, includeMatchToEnd:boolean):SpielReply | null {
     const wordPositionMap = createWordPositionMap(text);
-    return  _findMatch(wordPositionMap, this.currentNodeMatchers) ||
-      _findMatch(wordPositionMap, this.rootMatchers) || null;
+    return  _findMatch(wordPositionMap, this.currentNodeMatchers, includeMatchToEnd) ||
+      _findMatch(wordPositionMap, this.rootMatchers, includeMatchToEnd) || null;
   }
 }
 
