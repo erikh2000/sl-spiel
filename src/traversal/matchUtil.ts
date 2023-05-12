@@ -15,6 +15,7 @@ import {splitAndTrimText} from "../common/textFormatUtil";
   thank...you      = match the word "thank" followed by "you" with any number of words between.
   [thank you       = match the phrase "thank you" when preceded by a pause, e.g. start of sentence.
   thank you]       = match the phrase "thank you" when followed by a pause, e.g. end of sentence.
+  thank you...]    = match the phrase "thank you" anywhere in sentence but wait for a pause after the last word before matching.
   
  */
 

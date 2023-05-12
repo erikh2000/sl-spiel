@@ -6,6 +6,7 @@ import MatchManager from "../traversal/MatchManager";
 import SpielNode, {duplicateSpielNode, repairSpielNode} from './SpielNode';
 import SpielReply, {duplicateSpielReply, repairSpielReply} from './SpielReply';
 import SpielLine from "./SpielLine";
+import {assignSpeechIds} from "../common/speechIdUtil";
 
 function _duplicateSpiel(from:Spiel):Spiel {
     const spiel = new Spiel();
@@ -59,6 +60,7 @@ export function repairSpiel(spiel:Spiel):boolean {
     }
     wasChanged = _repairCurrentNodeIndex(spiel) || wasChanged;
     if (wasChanged) spiel.matchManager = null;
+    assignSpeechIds(spiel);
     return wasChanged;
 }
 
@@ -163,6 +165,7 @@ class Spiel {
             this.nodes.push(node);
             this.moveLast();
         }
+        assignSpeechIds(this);
         this.refreshMatching();
     }
     
@@ -180,6 +183,7 @@ class Spiel {
         if (typeof dialogue === 'string') dialogue = splitText(dialogue);
         node.line.dialogue = (node.line.dialogue === DIALOGUE_PLACEHOLDER) ?
           dialogue : node.line.dialogue.concat(dialogue);
+        assignSpeechIds(this);
     }
     
     updateDialogue(dialogue:string|string[]) {
@@ -187,6 +191,7 @@ class Spiel {
         if (!node) throw Error('No current node');
         if (typeof dialogue === 'string') dialogue = splitText(dialogue);
         node.line.dialogue = dialogue;
+        assignSpeechIds(this);
     }
     
     addReply(matchCriteria:string|string[], dialogue:string|string[], character?:string, emotion?:Emotion) {
@@ -196,6 +201,7 @@ class Spiel {
         if (!emotion) emotion = node.line.emotion;
         const reply = _createReply(matchCriteria, dialogue, character, emotion);
         node.replies.push(reply);
+        assignSpeechIds(this);
         this.refreshMatching();
     }
     
@@ -206,6 +212,7 @@ class Spiel {
         if (!character) character = node.line.character;
         if (!emotion) emotion = node.line.emotion;
         node.replies[replyIndex] = _createReply(matchCriteria, dialogue, character, emotion);
+        assignSpeechIds(this);
         this.refreshMatching();
     }
     
@@ -229,6 +236,7 @@ class Spiel {
         if (!emotion) emotion = Emotion.NEUTRAL;
         const reply = _createReply(matchCriteria, dialogue, character, emotion);
         this.rootReplies.push(reply);
+        assignSpeechIds(this);
         this.refreshMatching();
     }
 
@@ -236,7 +244,8 @@ class Spiel {
         if (replyIndex < 0 || replyIndex >= this.rootReplies.length) throw Error('index OOB');
         if (!character) character = this.defaultCharacter;
         if (!emotion) emotion = Emotion.NEUTRAL;
-        this.rootReplies[replyIndex] = _createReply(matchCriteria, dialogue, character, emotion);;
+        this.rootReplies[replyIndex] = _createReply(matchCriteria, dialogue, character, emotion);
+        assignSpeechIds(this);
         this.refreshMatching();
     }
     
