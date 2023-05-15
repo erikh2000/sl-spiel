@@ -139,7 +139,7 @@ describe('Spiel', () => {
       spiel.addReply('see / sea', 'c');
       spiel.addReply('dee / dead', 'd');
       spiel.addRootReply([], 'x');
-      spiel.addRootReply(['why', 'yay', 'baby'], 'y');
+      spiel.addRootReply(['why', 'yaY', 'Baby'], 'y');
       spiel.addRootReply(['zee'], 'z');
       spiel.addRootReply(['please]'], 'p');
       spiel.moveFirst();
@@ -233,6 +233,12 @@ describe('Spiel', () => {
       const reply = spiel.checkForMatch('please');
       expect(_getCode(reply)).toEqual(null);
     });
+    
+    it('matching is case-insensitive', () => {
+      spiel.moveTo(1);
+      const reply = spiel.checkForMatch('Zee');
+      expect(_getCode(reply)).toEqual('z');
+    });
   });
 
   describe('checkForMatchAfterSpeaking()', () => {
@@ -249,7 +255,7 @@ describe('Spiel', () => {
       spiel.addReply('see / sea', 'c');
       spiel.addReply('dee / dead', 'd');
       spiel.addRootReply([], 'x');
-      spiel.addRootReply(['why', 'yay', 'baby'], 'y');
+      spiel.addRootReply(['why', 'yaY', 'Baby'], 'y');
       spiel.addRootReply(['zee'], 'z');
       spiel.addRootReply(['please]'], 'p');
       spiel.moveFirst();
@@ -349,6 +355,12 @@ describe('Spiel', () => {
       spiel = new Spiel();
       const reply = spiel.checkForMatchAfterSpeaking('ay');
       expect(_getCode(reply)).toEqual(null);
+    });
+
+    it('matching is case-insensitive', () => {
+      spiel.moveTo(1);
+      const reply = spiel.checkForMatchAfterSpeaking('Zee');
+      expect(_getCode(reply)).toEqual('z');
     });
   });
   

@@ -79,7 +79,7 @@ function _findPhraseInWordPositionMap(phrase:Phrase, wordPositionMap:WordPositio
 }
 
 export function createMatchRulesetFromCriterion(matchCriterion:string):IMatchRuleset {
-  const trimmedCriterion = matchCriterion.trim();
+  const trimmedCriterion = matchCriterion.trim().toLowerCase();
   const matchFromStart = trimmedCriterion.startsWith('[');
   const matchToEnd = trimmedCriterion.endsWith(']');
   const lastPhraseMustBeAtEnd = matchToEnd && !trimmedCriterion.endsWith('...]');
@@ -97,7 +97,7 @@ export function createWordPositionMap(text:string):WordPositionMap {
   if (words.length === 0) return wordPositionMap;
 
   for(let wordI = 0; wordI < words.length; ++wordI) {
-    const word = words[wordI];
+    const word = words[wordI].toLowerCase();
     let wordPositions = wordPositionMap[word];
     if (!wordPositions) wordPositions = wordPositionMap[word] = [];
     wordPositions.push(wordI);
