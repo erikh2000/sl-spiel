@@ -1,4 +1,5 @@
 import {splitAndTrimText} from "../common/textFormatUtil";
+import SpielReply from "../types/SpielReply";
 
 /*
   Match format is designed with these goals:
@@ -26,6 +27,11 @@ export interface IMatchRuleset {
   matchFromStart:boolean,
   matchToEnd:boolean,
   lastPhraseMustBeAtEnd:boolean
+}
+
+export interface IMatcher {
+  ruleset:IMatchRuleset,
+  reply:SpielReply
 }
 
 type WordPositions = number[];
@@ -107,7 +113,7 @@ export function createWordPositionMap(text:string):WordPositionMap {
 }
 
 export function matchesRulesetInWordPositionMap(matchRuleset:IMatchRuleset, wordPositionMap:WordPositionMap) {
-  const { lastPhraseMustBeAtEnd, phrases, matchFromStart, matchToEnd } = matchRuleset;
+  const { lastPhraseMustBeAtEnd, phrases, matchFromStart } = matchRuleset;
   if (!phrases.length) return false;
 
   if (matchFromStart && !_isFirstPhraseAtStart(phrases, wordPositionMap)) return false;
@@ -122,4 +128,26 @@ export function matchesRulesetInWordPositionMap(matchRuleset:IMatchRuleset, word
   }
 
   return true;
+}
+
+function _doesRulesetMatchAnotherRuleset(ruleset:IMatchRuleset, against:IMatchRuleset):boolean {
+  for(let phraseI = 0; phraseI < ruleset.phrases.length; ++phraseI) {
+    const phrase = ruleset.phrases[phraseI];
+    const wordPositionMap = createWordPositionMap(phrase.join(' '));
+    if (matchesRulesetInWordPositionMap(against, wordPositionMap)) return true;
+  }
+  return false;
+}
+
+export function sortMatchersBySpecificity(matchers:IMatcher[]):void {
+  const matchersCount = matchers.length;
+  for(let i = 0; i < matchersCount - 1; ++i) {
+    for(let j = 1; j < matchersCount; ++j) {
+      const matcherI = matchers[i], matcherJ = matchers[j];
+      if (_doesRulesetMatchAnotherRuleset(matcherJ.ruleset, matcherI.ruleset)) {
+        matchers[i] = matcherJ;
+        matchers[j] = matcherI;
+      }
+    }
+  }
 }

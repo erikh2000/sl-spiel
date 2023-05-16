@@ -3,15 +3,10 @@ import SpielReply from "../types/SpielReply";
 import {
   createMatchRulesetFromCriterion,
   createWordPositionMap,
-  IMatchRuleset,
-  matchesRulesetInWordPositionMap,
+  IMatcher,
+  matchesRulesetInWordPositionMap, sortMatchersBySpecificity,
   WordPositionMap
 } from "./matchUtil";
-
-interface IMatcher {
-  ruleset:IMatchRuleset,
-  reply:SpielReply
-}
 
 export type NodeMatchersMap = {
   [id: number]: IMatcher[];
@@ -28,7 +23,7 @@ function _findMatch(wordPositionMap:WordPositionMap, matchers:IMatcher[], includ
   return null;
 }
 
-function _createMatchersForReplies(replies:SpielReply[]) {
+function _createMatchersForReplies(replies:SpielReply[]):IMatcher[] {
   const matchers:IMatcher[] = [];
   replies.forEach(reply => {
     reply.matchCriteria.forEach(criterion => {
@@ -38,6 +33,7 @@ function _createMatchersForReplies(replies:SpielReply[]) {
       })
     });
   });
+  sortMatchersBySpecificity(matchers);
   return matchers;
 }
 
