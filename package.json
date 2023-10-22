@@ -1,6 +1,6 @@
 {
   "name": "sl-spiel",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Library for loading, saving, and processing files in the Spiel format.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
