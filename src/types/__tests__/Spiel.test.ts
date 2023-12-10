@@ -640,6 +640,62 @@ describe('Spiel', () => {
     });
   });
   
+  describe('getting dialog text from a line', () => {
+    it('returns the first dialogue text repeatedly when there is only one', () => {
+      const spiel = new Spiel();
+      spiel.createNode();
+      spiel.addDialogue('hey');
+      expect(spiel.currentNode?.nextDialogue()).toEqual('hey');
+      expect(spiel.currentNode?.nextDialogue()).toEqual('hey');
+    });
+
+    it('when called repeatedly on a line with two dialogue texts, never returns the same text twice in a row', () => {
+      const spiel = new Spiel();
+      spiel.createNode();
+      spiel.addDialogue('hey');
+      spiel.addDialogue('ho');
+      let lastText = '';
+      for (let i = 0; i < 100; i++) {
+        if (!spiel.currentNode) throw Error('unexpected');
+        const text = spiel.currentNode.nextDialogue();
+        expect(text).not.toEqual(lastText);
+        lastText = text;
+      }
+    });
+
+    it('when called repeatedly on a line with three dialogue texts, never returns the same text twice in a row', () => {
+      const spiel = new Spiel();
+      spiel.createNode();
+      spiel.addDialogue('hey');
+      spiel.addDialogue('ho');
+      spiel.addDialogue('who');
+      let lastText = '';
+      for (let i = 0; i < 100; i++) {
+        if (!spiel.currentNode) throw Error('unexpected');
+        const text = spiel.currentNode.nextDialogue();
+        expect(text).not.toEqual(lastText);
+        lastText = text;
+      }
+    });
+
+    it('when called repeatedly on a line with three dialogue texts, will tend to return all three texts', () => {
+      const spiel = new Spiel();
+      spiel.createNode();
+      spiel.addDialogue('hey');
+      spiel.addDialogue('ho');
+      spiel.addDialogue('who');
+      const received:{[key:string]:boolean} = {};
+      for (let i = 0; i < 1000; i++) { // Calling it enough times to allow random distribution to work reliably.
+        if (!spiel.currentNode) throw Error('unexpected');
+        const text = spiel.currentNode.nextDialogue();
+        received[text] = true;
+      }
+      expect(received.hey).toBeTruthy();
+      expect(received.ho).toBeTruthy();
+      expect(received.who).toBeTruthy();
+    });
+  });
+  
   describe('addReply()', () => {
     it('throws on an empty spiel', () => {
       const spiel = new Spiel();
