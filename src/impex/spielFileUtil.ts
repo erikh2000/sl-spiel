@@ -125,6 +125,7 @@ function _storableToRuntime(storableSpiel:any):Spiel {
   spiel.rootReplies = _storableRepliesToRuntime(storableSpiel.rootReplies);
   spiel.defaultCharacter = storableSpiel.defaultCharacter;
   assignSpeechIds(spiel);
+  spiel.randomize(); // By randomizing, allows the nextDialogue() method to sometimes choose a first dialogue text after the spiel is loaded.
   return spiel;
 }
 

@@ -3,8 +3,8 @@ import {removeEmptyElements} from "../common/arrayUtil";
 import {splitText} from "../common/textFormatUtil";
 import Emotion from './Emotion';
 import MatchManager from "../traversal/MatchManager";
-import SpielNode, {duplicateSpielNode, repairSpielNode} from './SpielNode';
-import SpielReply, {duplicateSpielReply, repairSpielReply} from './SpielReply';
+import SpielNode, {duplicateSpielNode, randomizeSpielNode, repairSpielNode} from './SpielNode';
+import SpielReply, {duplicateSpielReply, randomizeSpielReply, repairSpielReply} from './SpielReply';
 import SpielLine from "./SpielLine";
 import {assignSpeechIds} from "../common/speechIdUtil";
 
@@ -279,6 +279,17 @@ class Spiel {
         this.removeNode(this.currentNodeIndex);
         _repairCurrentNodeIndex(this);
         this.refreshMatching();
+    }
+    
+    randomize() {
+        for(let nodeI = 0; nodeI < this.nodes.length; ++nodeI) {
+            const node = this.nodes[nodeI];
+            randomizeSpielNode(node);
+        }
+        for(let rootReplyI = 0; rootReplyI < this.rootReplies.length; ++rootReplyI) {
+            const rootReply = this.rootReplies[rootReplyI];
+            randomizeSpielReply(rootReply);
+        }
     }
 }
 

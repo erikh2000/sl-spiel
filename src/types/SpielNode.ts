@@ -1,5 +1,5 @@
-import SpielLine, {duplicateSpielLine, repairSpielLine} from "./SpielLine";
-import SpielReply, {duplicateSpielReply, repairSpielReply} from "./SpielReply";
+import SpielLine, {duplicateSpielLine, randomizeSpielLine, repairSpielLine} from "./SpielLine";
+import SpielReply, {duplicateSpielReply, randomizeSpielReply, repairSpielReply} from "./SpielReply";
 import {removeEmptyElements} from "../common/arrayUtil";
 
 class SpielNode {
@@ -13,6 +13,14 @@ class SpielNode {
   
   nextDialogue():string {
     return this.line.nextDialogue();
+  }
+}
+
+export function randomizeSpielNode(node:SpielNode) {
+  randomizeSpielLine(node.line);
+  for(let replyI = 0; replyI < node.replies.length; ++replyI) {
+    const reply = node.replies[replyI];
+    randomizeSpielReply(reply);
   }
 }
 

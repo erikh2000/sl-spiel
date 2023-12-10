@@ -1,4 +1,4 @@
-import SpielLine, {duplicateSpielLine, repairSpielLine} from './SpielLine';
+import SpielLine, {duplicateSpielLine, randomizeSpielLine, repairSpielLine} from './SpielLine';
 import { removeEmptyElements } from '../common/arrayUtil';
 
 class SpielReply {
@@ -17,6 +17,10 @@ class SpielReply {
 
 export function duplicateSpielReply(from:SpielReply):SpielReply {
   return new SpielReply(duplicateSpielLine(from.line), [...from.matchCriteria]);
+}
+
+export function randomizeSpielReply(reply:SpielReply) {
+  randomizeSpielLine(reply.line);
 }
 
 export function repairSpielReply(reply:SpielReply):boolean {

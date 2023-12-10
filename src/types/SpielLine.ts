@@ -35,6 +35,10 @@ export function duplicateSpielLine(from:SpielLine):SpielLine {
     return duplicate;
 }
 
+export function randomizeSpielLine(line:SpielLine) {
+  line.lastDialogueNo = Math.floor(Math.random() * line.dialogue.length);
+}
+
 export function repairSpielLine(line:SpielLine):boolean {
   let wasChanged = false;
   

@@ -1181,4 +1181,55 @@ describe('Spiel', () => {
       expect(() => spiel.moveNode(3, 0)).toThrow();
     });
   });
+  
+  describe('randomize()', () => {
+    it('randomizes the dialogue text of a node', () => {
+      const distribution:{[key:string]:boolean} = {};
+      for(let i = 0; i < 1000; ++i) { // Calling it enough times to allow random distribution to work reliably.
+        const spiel = new Spiel();
+        spiel.createNode();
+        spiel.addDialogue('a / b / c');
+        spiel.randomize();
+        if (!spiel.currentNode) throw Error('unexpected');
+        const line = spiel.currentNode.line;
+        const dialogueText = line.dialogue[line.lastDialogueNo];
+        distribution[dialogueText] = true;
+      }
+      expect(distribution.a).toBeTruthy();
+      expect(distribution.b).toBeTruthy();
+      expect(distribution.c).toBeTruthy();
+    });
+    
+    it('randomizes the dialogue text of a node reply', () => {
+      const distribution:{[key:string]:boolean} = {};
+      for(let i = 0; i < 1000; ++i) { // Calling it enough times to allow random distribution to work reliably.
+        const spiel = new Spiel();
+        spiel.createNode();
+        spiel.addReply('x', 'a / b / c');
+        spiel.randomize();
+        if (!spiel.currentNode) throw Error('unexpected');
+        const line = spiel.currentNode.replies[0].line;
+        const dialogueText = line.dialogue[line.lastDialogueNo];
+        distribution[dialogueText] = true;
+      }
+      expect(distribution.a).toBeTruthy();
+      expect(distribution.b).toBeTruthy();
+      expect(distribution.c).toBeTruthy();
+    });
+    
+    it('randomizes the dialogue text of a root reply', () => {
+      const distribution:{[key:string]:boolean} = {};
+      for(let i = 0; i < 1000; ++i) { // Calling it enough times to allow random distribution to work reliably.
+        const spiel = new Spiel();
+        spiel.addRootReply('x', 'a / b / c');
+        spiel.randomize();
+        const line = spiel.rootReplies[0].line;
+        const dialogueText = line.dialogue[line.lastDialogueNo];
+        distribution[dialogueText] = true;
+      }
+      expect(distribution.a).toBeTruthy();
+      expect(distribution.b).toBeTruthy();
+      expect(distribution.c).toBeTruthy();
+    });
+  });
 });
