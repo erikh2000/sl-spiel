@@ -1,6 +1,5 @@
 export * from './impex/fountainUtil';
 export * from './impex/spielFileUtil';
-export * from './impex/glossaryHtmlUtil';
 export * from './analysis/findUtil';
 
 export { default as Spiel, repairSpiel } from './types/Spiel';
