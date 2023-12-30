@@ -155,7 +155,7 @@ class Spiel {
         return this.matchManager.checkForMatch(text, true);
     }
     
-    createNode(character?:string, emotion?:Emotion, dialogue?:string|string[]) {
+    createNode(character?:string, emotion?:Emotion, dialogue?:string|string[], postDelay?:number) {
         if (character) {
             if (this.defaultCharacter === '') this.defaultCharacter = character;
         } else {
@@ -164,7 +164,7 @@ class Spiel {
         if (!emotion) emotion = Emotion.NEUTRAL;
         if (!dialogue) dialogue = DIALOGUE_PLACEHOLDER;
         if (typeof dialogue === 'string') dialogue = splitText(dialogue);
-        const node = new SpielNode(new SpielLine(character, dialogue, emotion), []);
+        const node = new SpielNode(new SpielLine(character, dialogue, emotion), [], postDelay);
         if (this.currentNodeIndex < this.nodes.length - 1) {
             this.nodes.splice(this.currentNodeIndex+1, 0, node);
             this.moveNext();
