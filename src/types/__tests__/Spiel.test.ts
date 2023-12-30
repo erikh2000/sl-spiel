@@ -1232,4 +1232,24 @@ describe('Spiel', () => {
       expect(distribution.c).toBeTruthy();
     });
   });
+  
+  describe('setPostDelay()', () => {
+    it('sets the post delay of a node', () => {
+      const spiel = new Spiel();
+      spiel.createNode();
+      spiel.setPostDelay(1000);
+      expect(spiel.currentNode?.postDelay).toEqual(1000);
+    });
+    
+    it('post delay is 0 by default', () => {
+      const spiel = new Spiel();
+      spiel.createNode();
+      expect(spiel.currentNode?.postDelay).toEqual(0);
+    });
+    
+    it('throws if no current node', () => {
+      const spiel = new Spiel();
+      expect(() => spiel.setPostDelay(1000)).toThrow();
+    });
+  });
 });

@@ -45,7 +45,7 @@ describe('SpielNode', () => {
       const fixedLine = {character:'BUBBA', dialogue:['Howdy!', 'Hello!'], emotion:Emotion.NEUTRAL} as SpielLine;
       const replies = [new SpielReply(line, ['hi', 'hello'])];
       const node = { line, replies } as SpielNode;
-      const expected = { line:fixedLine, replies } as SpielNode;
+      const expected = { line:fixedLine, replies, postDelay:0 } as SpielNode;
       expect(repairSpielNode(node)).toBeTruthy();
       expect(node).toEqual(expected);
     });
@@ -57,7 +57,7 @@ describe('SpielNode', () => {
       const replies = [invalidReply];
       const fixedReplies = [fixedReply];
       const node = { line, replies } as SpielNode;
-      const expected = { line, replies:fixedReplies } as SpielNode;
+      const expected = { line, replies:fixedReplies, postDelay:0 } as SpielNode;
       expect(repairSpielNode(node)).toBeTruthy();
       expect(node).toEqual(expected);
     });
@@ -67,8 +67,8 @@ describe('SpielNode', () => {
       const reply = {line, matchCriteria:[] as string[]} as SpielReply;
       const replies = [undefined, reply, null];
       const fixedReplies = [reply];
-      const node = { line, replies } as SpielNode;
-      const expected = { line, replies:fixedReplies } as SpielNode;
+      const node = { line, replies, postDelay:0 } as SpielNode;
+      const expected = { line, replies:fixedReplies, postDelay:0 } as SpielNode;
       expect(repairSpielNode(node)).toBeTruthy();
       expect(node).toEqual(expected);
     });

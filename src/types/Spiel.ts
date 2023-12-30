@@ -201,6 +201,12 @@ class Spiel {
         assignSpeechIds(this);
     }
     
+    setPostDelay(beatCount:number) {
+        const node = this.currentNode;
+        if (!node) throw Error('No current node');
+        node.postDelay = beatCount;
+    }
+    
     addReply(matchCriteria:string|string[], dialogue:string|string[], character?:string, emotion?:Emotion) {
         const node = this.currentNode;
         if (!node) throw Error('No current node');

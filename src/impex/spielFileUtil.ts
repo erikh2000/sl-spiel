@@ -20,7 +20,7 @@ function _runtimeRepliesToStorable(replies:SpielReply[]):any {
 }
 
 function _isSimpleNode(node:SpielNode) {
-  return node.replies.length === 0;
+  return node.replies.length === 0 && node.postDelay === 0;
 }
 
 function _runtimeSimpleNodeToStorable(node:SpielNode) {
@@ -32,7 +32,8 @@ function _runtimeComplexNodeToStorable(node:SpielNode) {
   return { 
     [node.line.character]: {
       dialogue: `${_emotionToParenthetical(node.line.emotion)}${node.line.dialogue.join(' / ')}`,
-      replies: _runtimeRepliesToStorable(node.replies)
+      replies: _runtimeRepliesToStorable(node.replies),
+      postDelay: node.postDelay
     }
   };
 }
@@ -85,9 +86,10 @@ function _storableSimpleNodeToRuntime(storableNode:any):SpielNode {
 function _storableComplexNodeToRuntime(storableNode:any):SpielNode {
   const character = _getCharacterFromStorableNodeOrReply(storableNode);
   const nodeData = storableNode[character];
+  const postDelay = nodeData.postDelay;
   const {dialogue, emotion} = _parseStorableDialogue(nodeData.dialogue);
-  return new SpielNode(new SpielLine(character, dialogue, emotion), 
-    _storableRepliesToRuntime(nodeData.replies));
+  const replies = _storableRepliesToRuntime(nodeData.replies);
+  return new SpielNode(new SpielLine(character, dialogue, emotion), replies, postDelay);
 }
 
 function _storableNodesToRuntime(storableNodes:any):SpielNode[] {

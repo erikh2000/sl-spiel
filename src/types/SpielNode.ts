@@ -5,10 +5,12 @@ import {removeEmptyElements} from "../common/arrayUtil";
 class SpielNode {
   line:SpielLine;
   replies:SpielReply[];
+  postDelay: number; // Measured in beats, where one beat is the typical delay after a completed sentence. Conversation speed (controlled by user) scales the time of one beat.
   
-  constructor(line:SpielLine, replies:SpielReply[]) {
+  constructor(line:SpielLine, replies:SpielReply[], postDelay:number = 0) {
     this.line = line;
     this.replies = replies;
+    this.postDelay = postDelay;
   }
   
   nextDialogue():string {
@@ -27,7 +29,8 @@ export function randomizeSpielNode(node:SpielNode) {
 export function duplicateSpielNode(from:SpielNode) {
   return new SpielNode(
     duplicateSpielLine(from.line),
-    from.replies.map((reply:SpielReply) => duplicateSpielReply(reply))
+    from.replies.map((reply:SpielReply) => duplicateSpielReply(reply)),
+    from.postDelay
   );
 }
 
@@ -39,6 +42,11 @@ export function repairSpielNode(node:SpielNode):boolean {
     wasChanged = true;
   } else {
     wasChanged = repairSpielLine(node.line) || wasChanged;
+  }
+  
+  if (node.postDelay === undefined) {
+    node.postDelay = 0;
+    wasChanged = true;
   }
 
   const repairedReplies = removeEmptyElements(node.replies);

@@ -7,7 +7,7 @@ import emptySpielText from "../__snapshots__/emptySpiel";
 import fullSpielText from "../__snapshots__/fullSpiel";
 import Emotion from "../../types/Emotion";
 
-describe('spielFileUtil', () => { // TODO  fix failing tests
+describe('spielFileUtil', () => {
   describe('exportSpielFile()', () => {
     it('creates text for an empty spiel', () => {
       const spiel = new Spiel();
@@ -19,7 +19,7 @@ describe('spielFileUtil', () => { // TODO  fix failing tests
       const spiel = new Spiel();
       const node1 = new SpielNode(new SpielLine('BIFF', ['Hey.'], Emotion.AMUSED), [
         new SpielReply(new SpielLine('BIFF', ['Hey hey!']), ['hey', 'hay'])
-      ]);
+      ], 3);
       const node2 = new SpielNode(new SpielLine('BIFF', ['ho']), []);
       spiel.nodes = [node1, node2];
       spiel.defaultCharacter = 'BIFF';
@@ -44,10 +44,12 @@ describe('spielFileUtil', () => { // TODO  fix failing tests
         replies:[{
           line:{character:"BIFF",dialogue:["Hey hey!"],emotion:Emotion.NEUTRAL,lastDialogueNo:0,speechIds:['f2a8']},
           matchCriteria:["hey","hay"]
-        }]
+        }],
+        postDelay:3
       },{
-      line:{character:"BIFF",dialogue:["ho"],emotion:Emotion.NEUTRAL,lastDialogueNo:0,speechIds:['757a']},
-        replies:[]
+        line:{character:"BIFF",dialogue:["ho"],emotion:Emotion.NEUTRAL,lastDialogueNo:0,speechIds:['757a']},
+        replies:[],
+        postDelay:0
       }],
       rootReplies:[{
         line:{
